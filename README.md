@@ -1,5 +1,11 @@
 # INSTALLATION
 
+To get the package on your computer, run the following command.
+```
+install_github("fdrennan/awsR")
+```
+
+Once installed, run the following.
 ```
 library(awsR)
 install_python() # Only need to once
