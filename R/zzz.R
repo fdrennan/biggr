@@ -1,7 +1,11 @@
 # global reference to scipy (will be initialized in .onLoad)
+#' scipy module
 scipy <- NULL
+#' boto module
 boto <- NULL
+#' subprocess module
 subprocess <- NULL
+#' sys module
 sys <- NULL
 
 .onLoad <- function(libname, pkgname) {

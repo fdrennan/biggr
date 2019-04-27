@@ -1,19 +1,6 @@
-# Hello, world!
-#
-# This is an example function named 'hello'
-# which prints 'Hello, world!'.
-#
-# You can learn more about package authoring with RStudio at:
-#
-#   http://r-pkgs.had.co.nz/
-#
-# Some useful keyboard shortcuts for package authoring:
-#
-#   Install Package:           'Cmd + Shift + B'
-#   Check Package:             'Cmd + Shift + E'
-#   Test Package:              'Cmd + Shift + T'
-
-
+#' install_python: sets up python environment for awsR
+#' @param method  method argument for py_install
+#' @param conda  conda argument for py_install
 #' @export install_python
 install_python <- function(method = "auto", conda = "auto") {
   reticulate::py_install("scipy", method = method, conda = conda)
@@ -21,6 +8,10 @@ install_python <- function(method = "auto", conda = "auto") {
   reticulate::py_install("boto3", method = method, conda = conda)
 }
 
+#' configure_aws
+#' @param aws_access_key_id IAM access key ID
+#' @param aws_secret_access_key IAM secret access key
+#' @param default.region AWS preferred region
 #' @export configure_aws
 configure_aws <- function(aws_access_key_id = NA,
                           aws_secret_access_key = NA,
