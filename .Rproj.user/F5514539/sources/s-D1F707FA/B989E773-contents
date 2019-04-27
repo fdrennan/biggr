@@ -1,0 +1,18 @@
+library(awsR)
+
+os <- 
+  import("os")
+
+subprocess <- 
+  import("subprocess")
+
+boto <- 
+  import("boto3")
+
+
+client = boto$client('ec2')
+
+
+# os$environ['aws_access_key_id'] = 'AKIAI5YKA35LAT2YCSBQ'
+# os$environ['aws_secret_access_key'] = ''
+# os$environ['default.region'] = 'us-east-2'
