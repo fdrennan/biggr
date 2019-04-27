@@ -19,3 +19,44 @@ To github.com:fdrennan/awsR.git
  * [new branch]      master -> master
 Branch 'master' set up to track remote branch 'master' from 'origin'.
 ]0;~/Documents/R/awsRdigitalfirstmedia@Digitals-MacBook-Pro [32m~/Documents/R/awsR[33m (master)[00m $ git add  --all
+]0;~/Documents/R/awsRdigitalfirstmedia@Digitals-MacBook-Pro [32m~/Documents/R/awsR[33m (master)[00m $ git comm it -m ""I"n"i"t"i"a"l" "s"e"t"u"p" "a"n"d" "i"n"s"t"a"l"l"a"t"i"o"n" "c"h"e"c"k"s"
+[master ce2ee7d] Initial setup and installation checks
+ 37 files changed, 510 insertions(+), 1 deletion(-)
+ create mode 100644 .Rbuildignore
+ create mode 100644 .Rproj.user/F5514539/console06/7CBA502F
+ create mode 100644 .Rproj.user/F5514539/console06/7CBA502F.env
+ create mode 100644 .Rproj.user/F5514539/console06/INDEX001
+ create mode 100644 .Rproj.user/F5514539/cpp-definition-cache
+ create mode 100644 .Rproj.user/F5514539/pcs/files-pane.pper
+ create mode 100644 .Rproj.user/F5514539/pcs/source-pane.pper
+ create mode 100644 .Rproj.user/F5514539/pcs/windowlayoutstate.pper
+ create mode 100644 .Rproj.user/F5514539/pcs/workbench-pane.pper
+ create mode 100644 .Rproj.user/F5514539/persistent-state
+ create mode 100644 .Rproj.user/F5514539/rmd-outputs
+ create mode 100644 .Rproj.user/F5514539/saved_source_markers
+ create mode 100644 .Rproj.user/F5514539/sources/prop/38DFE0D8
+ create mode 100644 .Rproj.user/F5514539/sources/prop/46BF1BF4
+ create mode 100644 .Rproj.user/F5514539/sources/prop/517F343
+ create mode 100644 .Rproj.user/F5514539/sources/prop/FA7C0C30
+ create mode 100644 .Rproj.user/F5514539/sources/prop/INDEX
+ create mode 100644 .Rproj.user/F5514539/sources/s-D1F707FA/25263C5
+ create mode 100644 .Rproj.user/F5514539/sources/s-D1F707FA/25263C5-contents
+ create mode 100644 .Rproj.user/F5514539/sources/s-D1F707FA/36B05960
+ create mode 100644 .Rproj.user/F5514539/sources/s-D1F707FA/36B05960-contents
+ create mode 100644 .Rproj.user/F5514539/sources/s-D1F707FA/3DA307CF
+ create mode 100644 .Rproj.user/F5514539/sources/s-D1F707FA/3DA307CF-contents
+ create mode 100644 .Rproj.user/F5514539/sources/s-D1F707FA/8A47A22C
+ create mode 100644 .Rproj.user/F5514539/sources/s-D1F707FA/8A47A22C-contents
+ create mode 100644 .Rproj.user/F5514539/sources/s-D1F707FA/B989E773
+ create mode 100644 .Rproj.user/F5514539/sources/s-D1F707FA/B989E773-contents
+ create mode 100644 .Rproj.user/F5514539/sources/s-D1F707FA/lock_file
+ create mode 100644 .Rproj.user/shared/notebooks/patch-chunk-names
+ create mode 100644 .Rproj.user/shared/notebooks/paths
+ create mode 100644 DESCRIPTION
+ create mode 100644 NAMESPACE
+ create mode 100644 R/hello.R
+ create mode 100644 R/zzz.R
+ create mode 100644 awsR.Rproj
+ create mode 100644 man/hello.Rd
+]0;~/Documents/R/awsRdigitalfirstmedia@Digitals-MacBook-Pro [32m~/Documents/R/awsR[33m (master)[00m $ touch .g it [Kignore
+]0;~/Documents/R/awsRdigitalfirstmedia@Digitals-MacBook-Pro [32m~/Documents/R/awsR[33m (master)[00m $ git add  --()[K[Kall
