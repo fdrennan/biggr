@@ -8,11 +8,12 @@ Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
 License: GPL-2
 Encoding: UTF-8
-Imports:
+Depends:
     reticulate,
     purrr,
     tibble,
     dplyr,
-    lubridate
+    lubridate,
+    tibble
 LazyData: true
 RoxygenNote: 6.1.0
