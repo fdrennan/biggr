@@ -22,9 +22,9 @@ install_python <- function(method = "auto", conda = "auto") {
 }
 
 #' @export configure_aws
-configure_aws <- function(aws_access_key_id = NULL,
-                          aws_secret_access_key = NULL,
-                          default.region = NULL) {
+configure_aws <- function(aws_access_key_id = NA,
+                          aws_secret_access_key = NA,
+                          default.region = NA) {
 
   access_key <-
     paste("aws configure set aws_access_key_id", aws_access_key_id)
