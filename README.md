@@ -32,7 +32,7 @@ resource = resource_ec2()
 Using the resource connection, you can create, change the status of, and get information about your ec2 instances.
 
 ```{r}
-ec2_data = get_ec2_info()
+ec2_data = ec2_get_info()
 ```
 
 ```
@@ -51,8 +51,7 @@ ec2_data = get_ec2_info()
 Now let's create an instance and then destroy it.
 
 ```{r}
-instance_ec2_create(resource, 
-                    ImageId = 'ami-0174e69c12bae5410', 
+ec2_instance_create(ImageId = 'ami-0174e69c12bae5410', 
                     InstanceType='t2.nano', 
                     min = 1, 
                     max = 1)
@@ -64,7 +63,7 @@ ec2.Instance(id='i-091d4fdcd1d9dffa5')
 ```
 We can verify that it does get created.
 ```{r}
-ec2_data = get_ec2_info()
+ec2_data = ec2_get_info()
 new_instances = ec2_data %>% filter(launch_time >= Sys.time() - minutes(5))
 ```
 
@@ -78,7 +77,7 @@ new_instances = ec2_data %>% filter(launch_time >= Sys.time() - minutes(5))
 
 And finally we terminate or stop it it
 ```{r}
-result = instance_ec2_stop(resource, new_instances$instance_id, terminate = FALSE)
+result = ec2_instance_stop(new_instances$instance_id, terminate = FALSE)
 ```
 
 ```
