@@ -2,7 +2,7 @@
 
 To get the package on your computer, run the following command.
 ```
-install_github("fdrennan/awsR")
+devtools::install_github("fdrennan/awsR")
 ```
 
 Once installed, run the following.
