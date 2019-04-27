@@ -1,115 +1,0 @@
-]0;~/Documents/R/awsR[?1034hdigitalfirstmedia@Digitals-MacBook-Pro [32m~/Documents/R/awsR[33m[00m $ [Kdigitalfirstmedia@Digitals-MacBook-Pro [32m~/Documents/R/awsR[33m[00m $ which awscli
-]0;~/Documents/R/awsRdigitalfirstmedia@Digitals-MacBook-Pro [32m~/Documents/R/awsR[33m[00m $ which awscli[K[K[K
-/usr/local/bin/aws
-]0;~/Documents/R/awsRdigitalfirstmedia@Digitals-MacBook-Pro [32m~/Documents/R/awsR[33m[00m $ [Kdigitalfirstmedia@Digitals-MacBook-Pro [32m~/Documents/R/awsR[33m[00m $ echo "# awsR" >>  README.md
-]0;~/Documents/R/awsRdigitalfirstmedia@Digitals-MacBook-Pro [32m~/Documents/R/awsR[33m[00m $ git init
-Initialized empty Git repository in /Users/digitalfirstmedia/Documents/R/awsR/.git/
-]0;~/Documents/R/awsRdigitalfirstmedia@Digitals-MacBook-Pro [32m~/Documents/R/awsR[33m[00m $ git add README.md [A
-]0;~/Documents/R/awsRdigitalfirstmedia@Digitals-MacBook-Pro [32m~/Documents/R/awsR[33m[00m $ git commit -m "fi rst commit"
-[master (root-commit) b5b3953] first commit
- 1 file changed, 1 insertion(+)
- create mode 100644 README.md
-]0;~/Documents/R/awsRdigitalfirstmedia@Digitals-MacBook-Pro [32m~/Documents/R/awsR[33m (master)[00m $ git remo te add origin git@github.com:fdrennan/awsR.git
-]0;~/Documents/R/awsRdigitalfirstmedia@Digitals-MacBook-Pro [32m~/Documents/R/awsR[33m (master)[00m $ git push  -u origin master
-Enumerating objects: 3, done.
-Counting objects:  33% (1/3)   Counting objects:  66% (2/3)   Counting objects: 100% (3/3)   Counting objects: 100% (3/3), done.
-Writing objects:  33% (1/3)   Writing objects:  66% (2/3)   Writing objects: 100% (3/3)   Writing objects: 100% (3/3), 221 bytes | 221.00 KiB/s, done.
-Total 3 (delta 0), reused 0 (delta 0)
-To github.com:fdrennan/awsR.git
- * [new branch]      master -> master
-Branch 'master' set up to track remote branch 'master' from 'origin'.
-]0;~/Documents/R/awsRdigitalfirstmedia@Digitals-MacBook-Pro [32m~/Documents/R/awsR[33m (master)[00m $ git add  --all
-]0;~/Documents/R/awsRdigitalfirstmedia@Digitals-MacBook-Pro [32m~/Documents/R/awsR[33m (master)[00m $ git comm it -m ""I"n"i"t"i"a"l" "s"e"t"u"p" "a"n"d" "i"n"s"t"a"l"l"a"t"i"o"n" "c"h"e"c"k"s"
-[master ce2ee7d] Initial setup and installation checks
- 37 files changed, 510 insertions(+), 1 deletion(-)
- create mode 100644 .Rbuildignore
- create mode 100644 .Rproj.user/F5514539/console06/7CBA502F
- create mode 100644 .Rproj.user/F5514539/console06/7CBA502F.env
- create mode 100644 .Rproj.user/F5514539/console06/INDEX001
- create mode 100644 .Rproj.user/F5514539/cpp-definition-cache
- create mode 100644 .Rproj.user/F5514539/pcs/files-pane.pper
- create mode 100644 .Rproj.user/F5514539/pcs/source-pane.pper
- create mode 100644 .Rproj.user/F5514539/pcs/windowlayoutstate.pper
- create mode 100644 .Rproj.user/F5514539/pcs/workbench-pane.pper
- create mode 100644 .Rproj.user/F5514539/persistent-state
- create mode 100644 .Rproj.user/F5514539/rmd-outputs
- create mode 100644 .Rproj.user/F5514539/saved_source_markers
- create mode 100644 .Rproj.user/F5514539/sources/prop/38DFE0D8
- create mode 100644 .Rproj.user/F5514539/sources/prop/46BF1BF4
- create mode 100644 .Rproj.user/F5514539/sources/prop/517F343
- create mode 100644 .Rproj.user/F5514539/sources/prop/FA7C0C30
- create mode 100644 .Rproj.user/F5514539/sources/prop/INDEX
- create mode 100644 .Rproj.user/F5514539/sources/s-D1F707FA/25263C5
- create mode 100644 .Rproj.user/F5514539/sources/s-D1F707FA/25263C5-contents
- create mode 100644 .Rproj.user/F5514539/sources/s-D1F707FA/36B05960
- create mode 100644 .Rproj.user/F5514539/sources/s-D1F707FA/36B05960-contents
- create mode 100644 .Rproj.user/F5514539/sources/s-D1F707FA/3DA307CF
- create mode 100644 .Rproj.user/F5514539/sources/s-D1F707FA/3DA307CF-contents
- create mode 100644 .Rproj.user/F5514539/sources/s-D1F707FA/8A47A22C
- create mode 100644 .Rproj.user/F5514539/sources/s-D1F707FA/8A47A22C-contents
- create mode 100644 .Rproj.user/F5514539/sources/s-D1F707FA/B989E773
- create mode 100644 .Rproj.user/F5514539/sources/s-D1F707FA/B989E773-contents
- create mode 100644 .Rproj.user/F5514539/sources/s-D1F707FA/lock_file
- create mode 100644 .Rproj.user/shared/notebooks/patch-chunk-names
- create mode 100644 .Rproj.user/shared/notebooks/paths
- create mode 100644 DESCRIPTION
- create mode 100644 NAMESPACE
- create mode 100644 R/hello.R
- create mode 100644 R/zzz.R
- create mode 100644 awsR.Rproj
- create mode 100644 man/hello.Rd
-]0;~/Documents/R/awsRdigitalfirstmedia@Digitals-MacBook-Pro [32m~/Documents/R/awsR[33m (master)[00m $ touch .g it [Kignore
-]0;~/Documents/R/awsRdigitalfirstmedia@Digitals-MacBook-Pro [32m~/Documents/R/awsR[33m (master)[00m $ git add  --()[K[Kall
-]0;~/Documents/R/awsRdigitalfirstmedia@Digitals-MacBook-Pro [32m~/Documents/R/awsR[33m (master)[00m $ git comm it -m ""R"e"m"o"v"i"n"g" "t"h"e" "R" " "p"r"o"j"e"c"t" "f"o"l"d"e"r"
-[master 18ac5be] Removing the R  project folder
- 3 files changed, 44 insertions(+), 1 deletion(-)
- create mode 100644 .gitignore
-]0;~/Documents/R/awsRdigitalfirstmedia@Digitals-MacBook-Pro [32m~/Documents/R/awsR[33m (master)[00m $ [Kdigitalfirstmedia@Digitals-MacBook-Pro [32m~/Documents/R/awsR[33m (master)[00m $ [Kdigitalfirstmedia@Digitals-MacBook-Pro [32m~/Documents/R/awsR[33m (master)[00m $ [Kdigitalfirstmedia@Digitals-MacBook-Pro [32m~/Documents/R/awsR[33m (master)[00m $ git push origin master
-Enumerating objects: 56, done.
-Counting objects:   1% (1/56)   Counting objects:   3% (2/56)   Counting objects:   5% (3/56)   Counting objects:   7% (4/56)   Counting objects:   8% (5/56)   Counting objects:  10% (6/56)   Counting objects:  12% (7/56)   Counting objects:  14% (8/56)   Counting objects:  16% (9/56)   Counting objects:  17% (10/56)   Counting objects:  19% (11/56)   Counting objects:  21% (12/56)   Counting objects:  23% (13/56)   Counting objects:  25% (14/56)   Counting objects:  26% (15/56)   Counting objects:  28% (16/56)   Counting objects:  30% (17/56)   Counting objects:  32% (18/56)   Counting objects:  33% (19/56)   Counting objects:  35% (20/56)   Counting objects:  37% (21/56)   Counting objects:  39% (22/56)   Counting objects:  41% (23/56)   Counting objects:  42% (24/56)   Counting objects:  44% (25/56)   Counting objects:  46% (26/56)   Counting objects:  48% (27/56)   Counting objects:  50% (28/56)   Counting objects:  51% (29/56)   Counting objects:  53% (30/56)   Counting objects:  55% (31/56)   Counting objects:  57% (32/56)   Counting objects:  58% (33/56)   Counting objects:  60% (34/56)   Counting objects:  62% (35/56)   Counting objects:  64% (36/56)   Counting objects:  66% (37/56)   Counting objects:  67% (38/56)   Counting objects:  69% (39/56)   Counting objects:  71% (40/56)   Counting objects:  73% (41/56)   Counting objects:  75% (42/56)   Counting objects:  76% (43/56)   Counting objects:  78% (44/56)   Counting objects:  80% (45/56)   Counting objects:  82% (46/56)   Counting objects:  83% (47/56)   Counting objects:  85% (48/56)   Counting objects:  87% (49/56)   Counting objects:  89% (50/56)   Counting objects:  91% (51/56)   Counting objects:  92% (52/56)   Counting objects:  94% (53/56)   Counting objects:  96% (54/56)   Counting objects:  98% (55/56)   Counting objects: 100% (56/56)   Counting objects: 100% (56/56), done.
-Delta compression using up to 8 threads.
-Compressing objects:   2% (1/45)   Compressing objects:   4% (2/45)   Compressing objects:   6% (3/45)   Compressing objects:   8% (4/45)   Compressing objects:  11% (5/45)   Compressing objects:  13% (6/45)   Compressing objects:  15% (7/45)   Compressing objects:  17% (8/45)   Compressing objects:  20% (9/45)   Compressing objects:  22% (10/45)   Compressing objects:  24% (11/45)   Compressing objects:  26% (12/45)   Compressing objects:  28% (13/45)   Compressing objects:  31% (14/45)   Compressing objects:  33% (15/45)   Compressing objects:  35% (16/45)   Compressing objects:  37% (17/45)   Compressing objects:  40% (18/45)   Compressing objects:  42% (19/45)   Compressing objects:  44% (20/45)   Compressing objects:  46% (21/45)   Compressing objects:  48% (22/45)   Compressing objects:  51% (23/45)   Compressing objects:  53% (24/45)   Compressing objects:  55% (25/45)   Compressing objects:  57% (26/45)   Compressing objects:  60% (27/45)   Compressing objects:  62% (28/45)   Compressing objects:  64% (29/45)   Compressing objects:  66% (30/45)   Compressing objects:  68% (31/45)   Compressing objects:  71% (32/45)   Compressing objects:  73% (33/45)   Compressing objects:  75% (34/45)   Compressing objects:  77% (35/45)   Compressing objects:  80% (36/45)   Compressing objects:  82% (37/45)   Compressing objects:  84% (38/45)   Compressing objects:  86% (39/45)   Compressing objects:  88% (40/45)   Compressing objects:  91% (41/45)   Compressing objects:  93% (42/45)   Compressing objects:  95% (43/45)   Compressing objects:  97% (44/45)   Compressing objects: 100% (45/45)   Compressing objects: 100% (45/45), done.
-Writing objects:   1% (1/55)   Writing objects:   3% (2/55)   Writing objects:   5% (3/55)   Writing objects:   7% (4/55)   Writing objects:   9% (5/55)   Writing objects:  10% (6/55)   Writing objects:  12% (7/55)   Writing objects:  14% (8/55)   Writing objects:  16% (9/55)   Writing objects:  18% (10/55)   Writing objects:  20% (11/55)   Writing objects:  21% (12/55)   Writing objects:  23% (13/55)   Writing objects:  25% (14/55)   Writing objects:  27% (15/55)   Writing objects:  29% (16/55)   Writing objects:  30% (17/55)   Writing objects:  32% (18/55)   Writing objects:  34% (19/55)   Writing objects:  36% (20/55)   Writing objects:  38% (21/55)   Writing objects:  40% (22/55)   Writing objects:  41% (23/55)   Writing objects:  43% (24/55)   Writing objects:  45% (25/55)   Writing objects:  47% (26/55)   Writing objects:  49% (27/55)   Writing objects:  54% (30/55)   Writing objects:  56% (31/55)   Writing objects:  60% (33/55)   Writing objects:  61% (34/55)   Writing objects:  63% (35/55)   Writing objects:  65% (36/55)   Writing objects:  67% (37/55)   Writing objects:  69% (38/55)   Writing objects:  70% (39/55)   Writing objects:  72% (40/55)   Writing objects:  74% (41/55)   Writing objects:  76% (42/55)   Writing objects:  78% (43/55)   Writing objects:  80% (44/55)   Writing objects:  81% (45/55)   Writing objects:  83% (46/55)   Writing objects:  85% (47/55)   Writing objects:  87% (48/55)   Writing objects:  89% (49/55)   Writing objects:  90% (50/55)   Writing objects:  92% (51/55)   Writing objects:  94% (52/55)   Writing objects:  96% (53/55)   Writing objects:  98% (54/55)   Writing objects: 100% (55/55)   Writing objects: 100% (55/55), 9.36 KiB | 162.00 KiB/s, done.
-Total 55 (delta 8), reused 0 (delta 0)
-remote: Resolving deltas:   0% (0/8)   [Kremote: Resolving deltas:  12% (1/8)   [Kremote: Resolving deltas:  25% (2/8)   [Kremote: Resolving deltas:  37% (3/8)   [Kremote: Resolving deltas:  50% (4/8)   [Kremote: Resolving deltas:  62% (5/8)   [Kremote: Resolving deltas:  87% (7/8)   [Kremote: Resolving deltas: 100% (8/8)   [Kremote: Resolving deltas: 100% (8/8), done.[K
-To github.com:fdrennan/awsR.git
-   b5b3953..18ac5be  master -> master
-]0;~/Documents/R/awsRdigitalfirstmedia@Digitals-MacBook-Pro [32m~/Documents/R/awsR[33m (master)[00m $ GIT [K[K[K[Kgit r[K-rf[Km .Rproj.user
-unknown option: -rm
-usage: git [--version] [--help] [-C <path>] [-c <name>=<value>]
-           [--exec-path[=<path>]] [--html-path] [--man-path] [--info-path]
-           [-p | --paginate | -P | --no-pager] [--no-replace-objects] [--bare]
-           [--git-dir=<path>] [--work-tree=<path>] [--namespace=<name>]
-           <command> [<args>]
-]0;~/Documents/R/awsRdigitalfirstmedia@Digitals-MacBook-Pro [32m~/Documents/R/awsR[33m (master)[00m $ git -rm .Rproj.user-.Rproj.userr.Rproj.user .Rproj.user
-unknown option: -rm
-usage: git [--version] [--help] [-C <path>] [-c <name>=<value>]
-           [--exec-path[=<path>]] [--html-path] [--man-path] [--info-path]
-           [-p | --paginate | -P | --no-pager] [--no-replace-objects] [--bare]
-           [--git-dir=<path>] [--work-tree=<path>] [--namespace=<name>]
-           <command> [<args>]
-]0;~/Documents/R/awsRdigitalfirstmedia@Digitals-MacBook-Pro [32m~/Documents/R/awsR[33m (master)[00m $ git rm -r .Rproj.user
-error: the following files have local modifications:
-    .Rproj.user/F5514539/console06/7CBA502F
-    .Rproj.user/F5514539/console06/INDEX001
-(use --cached to keep the file, or -f to force removal)
-]0;~/Documents/R/awsRdigitalfirstmedia@Digitals-MacBook-Pro [32m~/Documents/R/awsR[33m (master)[00m $ git add --all
-]0;~/Documents/R/awsRdigitalfirstmedia@Digitals-MacBook-Pro [32m~/Documents/R/awsR[33m (master)[00m $ git commit -m 'update'
-[master 393296e] update
- 2 files changed, 36 insertions(+), 2 deletions(-)
- rewrite .Rproj.user/F5514539/console06/INDEX001 (69%)
-]0;~/Documents/R/awsRdigitalfirstmedia@Digitals-MacBook-Pro [32m~/Documents/R/awsR[33m (master)[00m $ git push origin master
-Enumerating objects: 13, done.
-Counting objects:   7% (1/13)   Counting objects:  15% (2/13)   Counting objects:  23% (3/13)   Counting objects:  30% (4/13)   Counting objects:  38% (5/13)   Counting objects:  46% (6/13)   Counting objects:  53% (7/13)   Counting objects:  61% (8/13)   Counting objects:  69% (9/13)   Counting objects:  76% (10/13)   Counting objects:  84% (11/13)   Counting objects:  92% (12/13)   Counting objects: 100% (13/13)   Counting objects: 100% (13/13), done.
-Delta compression using up to 8 threads.
-Compressing objects:  14% (1/7)   Compressing objects:  28% (2/7)   Compressing objects:  42% (3/7)   Compressing objects:  57% (4/7)   Compressing objects:  71% (5/7)   Compressing objects:  85% (6/7)   Compressing objects: 100% (7/7)   Compressing objects: 100% (7/7), done.
-Writing objects:  14% (1/7)   Writing objects:  28% (2/7)   Writing objects:  42% (3/7)   Writing objects:  57% (4/7)   Writing objects:  71% (5/7)   Writing objects:  85% (6/7)   Writing objects: 100% (7/7)   Writing objects: 100% (7/7), 2.97 KiB | 58.00 KiB/s, done.
-Total 7 (delta 3), reused 0 (delta 0)
-remote: Resolving deltas:   0% (0/3)   [Kremote: Resolving deltas:  33% (1/3)   [Kremote: Resolving deltas:  66% (2/3)   [Kremote: Resolving deltas: 100% (3/3)   [Kremote: Resolving deltas: 100% (3/3), completed with 3 local objects.[K
-To github.com:fdrennan/awsR.git
-   18ac5be..393296e  master -> master
-]0;~/Documents/R/awsRdigitalfirstmedia@Digitals-MacBook-Pro [32m~/Documents/R/awsR[33m (master)[00m $ git push origin mastercommit -m 'update'[9Padd --allrm -r .Rproj.user[C[K[K[K[K[K*
-error: the following file has local modifications:
-    .Rproj.user/F5514539/console06/7CBA502F
-(use --cached to keep the file, or -f to force removal)
-]0;~/Documents/R/awsRdigitalfirstmedia@Digitals-MacBook-Pro [32m~/Documents/R/awsR[33m (master)[00m $ git rm -r .Rproj*push origin mastercommit -m 'update'[9Padd --all
