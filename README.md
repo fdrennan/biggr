@@ -17,17 +17,19 @@ configure_aws(
 )
 ```
 
-## Connecting to an ec2 client
+### Connecting to an ec2 client
 
 Client is a lower level wrapper. Most functions will use the resource function.
 ```{r}
 client = client_ec2()
 ```
 
-## Connecting to an ec2 resource
+### Connecting to an ec2 resource
 ```{r}
 resource = resource_ec2()
 ```
+
+## EC2
 
 Using the resource connection, you can create, change the status of, and get information about your ec2 instances.
 
@@ -128,3 +130,71 @@ result = ec2_instance_stop(new_instances$instance_id, terminate = FALSE)
 [[1]]$ResponseMetadata$HTTPHeaders$server
 [1] "AmazonEC2"
 ```
+
+
+## S3
+
+Create a bucket using `s3_create_bucket`
+
+```{r}
+s3_create_bucket(
+  bucket_name = 'freddydbucket', 
+  location = 'us-east-2'
+)
+```
+
+```
+$Location
+[1] "http://freddydbucket.s3.amazonaws.com/"
+
+$ResponseMetadata
+$ResponseMetadata$HostId
+[1] "G43iK+UUYoo31NbHC5QlAD5ci+6EJwbHulr0qNfy54i87jkPsPhcs14haR+Sg9jOgeyV70Z8URY="
+
+$ResponseMetadata$RetryAttempts
+[1] 0
+
+$ResponseMetadata$HTTPStatusCode
+[1] 200
+
+$ResponseMetadata$RequestId
+[1] "F639FDF93B2A8EA2"
+
+$ResponseMetadata$HTTPHeaders
+$ResponseMetadata$HTTPHeaders$date
+[1] "Sat, 27 Apr 2019 23:24:09 GMT"
+
+$ResponseMetadata$HTTPHeaders$`content-length`
+[1] "0"
+
+$ResponseMetadata$HTTPHeaders$`x-amz-request-id`
+[1] "F639FDF93B2A8EA2"
+
+$ResponseMetadata$HTTPHeaders$location
+[1] "http://freddydbucket.s3.amazonaws.com/"
+
+$ResponseMetadata$HTTPHeaders$`x-amz-id-2`
+[1] "G43iK+UUYoo31NbHC5QlAD5ci+6EJwbHulr0qNfy54i87jkPsPhcs14haR+Sg9jOgeyV70Z8URY="
+
+$ResponseMetadata$HTTPHeaders$server
+[1] "AmazonS3"
+```
+
+Upload a file using `s3_upload_file`
+```{r}
+s3_upload_file(
+    bucket = 'freddydbucket', 
+    from = 'NAMESPACE', 
+    to = 'uploaded_NAMESPACE'
+)
+```
+
+Download a file using `s3_download_file`
+```{r}
+s3_download_file(
+    bucket = 'freddydbucket', 
+    from = 'uploaded_NAMESPACE', 
+    to = 'downloaded_NAMESPACE'
+)
+```
+
