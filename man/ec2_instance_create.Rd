@@ -5,14 +5,30 @@
 \title{ec2_instance_create}
 \usage{
 ec2_instance_create(ImageId = NA, InstanceType = "t2.nano", min = 1,
-  max = 1)
+  max = 1, KeyName = NA, SecurityGroupId = NA,
+  InstanceStorage = 50, postgres_password = "password",
+  phone_number = NA, DeviceName = "/dev/sda1")
 }
 \arguments{
 \item{ImageId}{An aws ec2 id: i.e., 'ami-0174e69c12bae5410'}
 
 \item{InstanceType}{See \url{https://aws.amazon.com/ec2/instance-types/}}
 
-\item{resource}{The result of resource_ec2}
+\item{min}{min instances}
+
+\item{max}{max instances}
+
+\item{KeyName}{A .pem file to ssh}
+
+\item{SecurityGroupId}{SecurityGroupId of security group you have created in UI}
+
+\item{InstanceStorage}{Size of the box in gb}
+
+\item{postgres_password}{password for postgres database. username is postgres}
+
+\item{phone_number}{For notification of completion}
+
+\item{DeviceName}{"/dev/sda1"}
 }
 \description{
 ec2_instance_create

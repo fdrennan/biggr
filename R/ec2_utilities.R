@@ -25,11 +25,17 @@ ec2_get_info <- function() {
 
 
 #' ec2_instance_stop
-#' @param resource The result of resource_ec2
 #' @param ids An aws ec2 id: i.e., 'i-034e6090b1eb879e7'
 #' @param terminate An boolean to specify whether to stop or terminate
 #' @export ec2_instance_stop
 ec2_instance_stop = function(ids, terminate = FALSE) {
+
+  if(terminate) {
+    resp <- readline(prompt="Are you sure you want to terminate this instace? All data will be destroyed - y/n: ")
+    if(resp != 'y') {
+      stop()
+    }
+  }
   resource = resource_ec2()
   ids = list(ids)
   instances = resource$instances
@@ -47,50 +53,32 @@ ec2_instance_stop = function(ids, terminate = FALSE) {
 #' @param max max instances
 #' @param KeyName A .pem file to ssh
 #' @param SecurityGroupId SecurityGroupId of security group you have created in UI
+#' @param InstanceStorage Size of the box in gb
+#' @param postgres_password password for postgres database. username is postgres
+#' @param phone_number For notification of completion
+#' @param DeviceName  "/dev/sda1"
 #' @export ec2_instance_create
 ec2_instance_create <- function(ImageId = NA,
                                 InstanceType='t2.nano',
                                 min = 1,
                                 max = 1,
                                 KeyName = NA,
-                                SecurityGroupId = NA) {
+                                SecurityGroupId = NA,
+                                InstanceStorage = 50,
+                                postgres_password = 'password',
+                                phone_number = NA,
+                                DeviceName = "/dev/sda1") {
   if(is.na(KeyName)) {
     stop("Please input a KeyName or create one using the AWS UI.")
   }
 
-  message(
-    "Once the server is complete, you will receive a default message from textbelt.com"
-  )
+  if(is.na(SecurityGroupId)) {
+    SecurityGroupId <- security_group_create()
+    message(SecurityGroupId)
+  }
 
-  user_data = paste( '#!/bin/bash',
-                     'echo "test" > /tmp/hello',
-                     'sudo apt update',
-
-                     # Load postgres
-                     'sudo apt install postgresql postgresql-contrib -y',
-                     'CONF_FILE=$(find / -name "postgresql.conf" | grep main)',
-                     'PG_FILE=$(find / -name "pg_hba.conf" | grep main)',
-                     'echo "listen_addresses = \'*\'" >> $CONF_FILE',
-                     'echo "host    all             all             0.0.0.0/0               md5" >> $PG_FILE',
-                     'echo "host    all             all             ::/0                    md5" >> $PG_FILE',
-                     'echo "#!/bin/bash" >> /tmp/update_pass',
-                     'echo  "sudo -u postgres -H -- psql -c \\"ALTER USER postgres PASSWORD \'myPassword\'\\"" >> /tmp/update_pass',
-                     'sh /tmp/update_pass',
-                     'service postgresql stop',
-                     'service postgresql start',
-
-                     # Send Notification
-                     '/usr/bin/curl -X POST https://textbelt.com/text \\
-                              --data-urlencode phone=\'2549318313\' \\
-                              --data-urlencode message=\'Find Your Phone!\' \\
-                              -d key=textbelt',
-
-                     # Something else
-                     sep = "\n")
-
-  message(
-    user_data
-  )
+  user_data <- user_data_gen(postgres_password = postgres_password,
+                             phone_number = phone_number)
 
   resource = resource_ec2()
 
@@ -100,5 +88,15 @@ ec2_instance_create <- function(ImageId = NA,
                             InstanceType=InstanceType,
                             UserData = user_data,
                             KeyName = KeyName,
-                            SecurityGroupIds = list(SecurityGroupId))
+                            SecurityGroupIds = list(SecurityGroupId),
+                            BlockDeviceMappings = list(
+                              list(
+                                Ebs = list(
+                                  VolumeSize = as.integer(InstanceStorage)
+                                ),
+                                DeviceName = DeviceName
+                              )
+                            )
+  )
 }
+
