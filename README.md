@@ -16,6 +16,22 @@ configure_aws(
           default.region        = "XXXXXX"
 )
 ```
+
+## Costs
+It is important to monitor your costs. Today's costs do not show up immediately. Be careful and always have to option to close down servers in the AWS UI.
+```{r}
+cost_get(from = '2019-04-25', to = '2019-04-28')
+```
+
+```
+# A tibble: 3 x 4
+  start      unblended_cost blended_cost usage_quantity
+  <chr>               <dbl>        <dbl>          <dbl>
+1 2019-04-25           1.41         1.41           457.
+2 2019-04-26           1.36         1.36           497.
+3 2019-04-27           1.99         1.99           548.
+```
+
 ## EC2
 
 ### Connecting to an ec2 client
