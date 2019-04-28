@@ -16,11 +16,6 @@ system("virtualenv -p /usr/bin/python3 /home/ubuntu/.virtualenvs/py3-virtualenv"
 # Also works with this
 #virtualenv_create("py3-virtualenv", python = "/usr/bin/python3")
 use_virtualenv("py3-virtualenv")
-install_python <- function (method = "auto", conda = "auto", envname = 'r_reticulate')  {
-  reticulate::py_install("scipy", method = method, conda = conda, envname = envname)
-  reticulate::py_install("awscli", method = method, conda = conda, envname = envname)
-  reticulate::py_install("boto3", method = method, conda = conda, envname = envname)
-}
 install_python(envname = "py3-virtualenv")
 
 ```
