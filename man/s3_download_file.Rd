@@ -2,7 +2,7 @@
 % Please edit documentation in R/s3_utilities.R
 \name{s3_download_file}
 \alias{s3_download_file}
-\title{download_file}
+\title{s3_download_file}
 \usage{
 s3_download_file(bucket, from, to)
 }
@@ -14,5 +14,5 @@ s3_download_file(bucket, from, to)
 \item{to}{File path}
 }
 \description{
-download_file
+s3_download_file
 }
