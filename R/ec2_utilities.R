@@ -102,20 +102,3 @@ ec2_instance_create <- function(ImageId = NA,
                             KeyName = KeyName,
                             SecurityGroupIds = list(SecurityGroupId))
 }
-
-if(FALSE) {
-  ec2_instance_create(ImageId = 'ami-0c55b159cbfafe1f0',
-                      KeyName = 'Shiny',
-                      InstanceType = 't2.large',
-                      SecurityGroupId = 'sg-0e8841d7a144aa628')
-  instances = ec2_get_info()
-  instances %>%
-    filter(launch_time == max(launch_time)) %>%
-    .[1,1] %>%
-    as.character() %>%
-    str_replace_all("\\.", "\\-") %>%
-    paste0('ssh -i "Shiny.pem" ubuntu@ec2-',
-           .,
-           '.us-east-2.compute.amazonaws.com') %>%
-    cat
-}
