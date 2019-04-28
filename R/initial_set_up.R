@@ -2,10 +2,10 @@
 #' @param method  method argument for py_install
 #' @param conda  conda argument for py_install
 #' @export install_python
-install_python <- function(method = "auto", conda = "auto") {
-  reticulate::py_install("scipy", method = method, conda = conda)
-  reticulate::py_install("awscli", method = method, conda = conda)
-  reticulate::py_install("boto3", method = method, conda = conda)
+install_python <- function (method = "auto", conda = "auto", envname = 'r_reticulate')  {
+  reticulate::py_install("scipy", method = method, conda = conda, envname = envname)
+  reticulate::py_install("awscli", method = method, conda = conda, envname = envname)
+  reticulate::py_install("boto3", method = method, conda = conda, envname = envname)
 }
 
 #' configure_aws
