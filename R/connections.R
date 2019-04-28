@@ -21,3 +21,9 @@ client_s3 <- function() {
 resource_s3 <- function() {
   boto$resource("s3")
 }
+
+#' client_cost
+#' @export client_cost
+client_cost <- function() {
+  boto$client("ce")
+}
