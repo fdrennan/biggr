@@ -16,6 +16,7 @@ configure_aws(
           default.region        = "XXXXXX"
 )
 ```
+## EC2
 
 ### Connecting to an ec2 client
 
@@ -29,106 +30,118 @@ client = client_ec2()
 resource = resource_ec2()
 ```
 
-## EC2
-
 Using the resource connection, you can create, change the status of, and get information about your ec2 instances.
 
-```{r}
-ec2_data = ec2_get_info()
-```
-
-```
-# A tibble: 6 x 7
-  public_ip_addre… priviate_ip_add… image_id instance_id launch_time        
-  <chr>            <chr>            <chr>    <chr>       <dttm>             
-1 NA               172.31.35.224    ami-0c5… i-0f49b651… 2019-04-27 18:14:32
-2 NA               172.31.42.198    ami-0c5… i-0c36f716… 2019-04-27 18:11:33
-3 18.217.102.18    172.31.27.124    ami-06d… i-0fdab899… 2019-04-27 18:32:51
-4 NA               172.31.44.30     ami-017… i-0bfbb430… 2019-04-27 18:47:53
-5 NA               172.31.45.198    ami-0c5… i-0045ea7f… 2019-04-27 18:20:18
-6 NA               172.31.32.48     ami-0c5… i-00270b7f… 2019-04-27 18:26:10
-# … with 2 more variables: instance_type <chr>, state <chr>
-```
-
-Now let's create an instance and then destroy it.
+First, if you haven't created a key pair run the following commands. 
 
 ```{r}
-ec2_instance_create(ImageId = 'ami-0174e69c12bae5410', 
-                    InstanceType='t2.nano', 
-                    min = 1, 
-                    max = 1)
+key_pair <- client_ec2()$create_key_pair(KeyName='foo')
+ 
+write.table(key_pair$KeyMaterial,
+            file = 'foo.pem',
+            row.names = FALSE, 
+            col.names = FALSE, 
+            quote = FALSE)
 ```
 
-```
-[[1]]
-ec2.Instance(id='i-091d4fdcd1d9dffa5')                
-```
-We can verify that it does get created.
+Then, run `chmod 400 foo.pem`
+
+Now you're ready to create a server. 
 ```{r}
-ec2_data = ec2_get_info()
-new_instances = ec2_data %>% filter(launch_time >= Sys.time() - minutes(5))
+server <- 
+  ec2_instance_create(ImageId = 'ami-0c55b159cbfafe1f0',
+                      KeyName = 'foo',
+                      InstanceType = 't2.medium',
+                      InstanceStorage = 50,
+                      postgres_password = 'password',
+                      phone_number = 2549318313,
+                      DeviceName = "/dev/sda1")
 ```
 
-```
-# A tibble: 1 x 7
-  public_ip_address priviate_ip_addr… image_id  instance_id  launch_time         instance_type state
-  <chr>             <chr>             <chr>     <chr>        <dttm>              <chr>         <chr>
-1 18.220.108.19     172.31.41.49      ami-0174… i-091d4fdcd… 2019-04-27 19:08:28 t3.micro      runn…
-
-```
-
-And finally we terminate or stop it it
+Get the most recent server data 
 ```{r}
-result = ec2_instance_stop(new_instances$instance_id, terminate = FALSE)
+ec2_info <- ec2_get_info() %>% 
+  filter(state == 'running') %>%
+  filter(launch_time == max(launch_time))
+```
+
+Check out the ec2_instance data
+```{r}
+glimpse(ec2_info)
 ```
 
 ```
-[[1]]
-[[1]]$StoppingInstances
-[[1]]$StoppingInstances[[1]]
-[[1]]$StoppingInstances[[1]]$InstanceId
-[1] "i-091d4fdcd1d9dffa5"
-
-[[1]]$StoppingInstances[[1]]$CurrentState
-[[1]]$StoppingInstances[[1]]$CurrentState$Code
-[1] 64
-
-[[1]]$StoppingInstances[[1]]$CurrentState$Name
-[1] "stopping"
+Observations: 1
+Variables: 7
+$ public_ip_address   <chr> "18.188.34.221"
+$ priviate_ip_address <chr> "172.31.12.51"
+$ image_id            <chr> "ami-0c55b159cbfafe1f0"
+$ instance_id         <chr> "i-09532cd8df558929a"
+$ launch_time         <dttm> 2019-04-28 21:24:38
+$ instance_type       <chr> "t2.medium"
+$ state               <chr> "running"
+```
 
 
-[[1]]$StoppingInstances[[1]]$PreviousState
-[[1]]$StoppingInstances[[1]]$PreviousState$Code
-[1] 16
+Clean version of messaging I need to add to creation function. 
+```{r}
+ec2_info$public_ip_address %>% 
+  str_replace_all('\\.', '\\-') %>% 
+  paste0('ssh -i "foo.pem" ubuntu@ec2-', ., '.us-east-2.compute.amazonaws.com', collapse = "") %>% 
+  paste("Please enter the follwing into your terminal", 
+        ., 
+        'Then type on the remote server to set your password: sudo passwd ubuntu',
+        paste0('Login with the username ubuntu with the password you just set at RStudio Server: ', ec2_info$public_ip_address,  ":8787"),
+        sep = "\n") %>% 
+  message
+```
 
-[[1]]$StoppingInstances[[1]]$PreviousState$Name
-[1] "running"
+```
+Please enter the follwing into your terminal
+ssh -i "foo.pem" ubuntu@ec2-18-188-34-221.us-east-2.compute.amazonaws.com
+Then type on the remote server to set your password: sudo passwd ubuntu
+Login with the username ubuntu with the password you just set at RStudio Server: 18.188.34.221:8787
+```
 
+Once you hear a ding, try connecting to the database using the instructions above. 
+```{r}
+library(RPostgreSQL)
+library(tidyverse)
+library(dbplyr)
+library(lubridate)
+library(DBI)
 
+con <- dbConnect(PostgreSQL(),
+                 # dbname   = 'linkedin',
+                 host     = ec2_info$public_ip_address,
+                 port     = 5432,
+                 user     = "postgres",
+                 password = "password")
+```
 
+Write to the database you just made. 
+```{r}
+dbWriteTable(con, 'mtcars', mtcars, append = TRUE)
 
-[[1]]$ResponseMetadata
-[[1]]$ResponseMetadata$RetryAttempts
-[1] 0
+mtcars_data <-
+  tbl(con, in_schema('public', 'mtcars'))
+  
+head(mtcars_data) %>%
+  collect
+```
 
-[[1]]$ResponseMetadata$HTTPStatusCode
-[1] 200
+Terminate the instance
+```{r}
+ec2_instance_stop(ids = ec2_info$instance_id, terminate = TRUE)
+```
 
-[[1]]$ResponseMetadata$RequestId
-[1] "bd29f15b-18c9-44de-ad3d-5f04c91cbcf6"
+Modify the instance
+```{r}
+client$modify_instance_attribute(InstanceId=ec2_info$instance_id, 
+                                 Attribute='instanceType',
+                                 Value='t2.small')
 
-[[1]]$ResponseMetadata$HTTPHeaders
-[[1]]$ResponseMetadata$HTTPHeaders$date
-[1] "Sat, 27 Apr 2019 19:09:02 GMT"
-
-[[1]]$ResponseMetadata$HTTPHeaders$`content-length`
-[1] "579"
-
-[[1]]$ResponseMetadata$HTTPHeaders$`content-type`
-[1] "text/xml;charset=UTF-8"
-
-[[1]]$ResponseMetadata$HTTPHeaders$server
-[1] "AmazonEC2"
+client$start_instances(InstanceIds = list(ec2_info$instance_id))
 ```
 
 

@@ -10,8 +10,6 @@ ec2_instance_stop(ids, terminate = FALSE)
 \item{ids}{An aws ec2 id: i.e., 'i-034e6090b1eb879e7'}
 
 \item{terminate}{An boolean to specify whether to stop or terminate}
-
-\item{resource}{The result of resource_ec2}
 }
 \description{
 ec2_instance_stop
