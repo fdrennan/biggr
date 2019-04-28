@@ -10,6 +10,16 @@ library(awsR)
 library(tidyverse)
 ```
 
+```{r, eval = FALSE}
+library(awsR)
+system("virtualenv -p /usr/bin/python3 /home/ubuntu/.virtualenvs/py3-virtualenv")
+# Also works with this
+#virtualenv_create("py3-virtualenv", python = "/usr/bin/python3")
+use_virtualenv("py3-virtualenv")
+install_python(envname = "py3-virtualenv")
+
+```
+
 ```{r}
 # key_pair <- client_ec2()$create_key_pair(KeyName='foo')
 # 
@@ -75,6 +85,10 @@ dbWriteTable(con, 'mtcars', mtcars, append = TRUE)
 
 mtcars_data <-
   tbl(con, in_schema('public', 'mtcars'))
+```
+
+```{r}
+head(mtcars_data) %>% collect()
 ```
 
 
