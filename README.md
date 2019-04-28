@@ -16,6 +16,7 @@ configure_aws(
           default.region        = "XXXXXX"
 )
 ```
+## EC2
 
 ### Connecting to an ec2 client
 
@@ -28,8 +29,6 @@ client = client_ec2()
 ```{r}
 resource = resource_ec2()
 ```
-
-## EC2
 
 Using the resource connection, you can create, change the status of, and get information about your ec2 instances.
 
@@ -95,7 +94,13 @@ ec2_info$public_ip_address %>%
         paste0('Login with the username ubuntu with the password you just set at RStudio Server: ', ec2_info$public_ip_address,  ":8787"),
         sep = "\n") %>% 
   message
+```
 
+```
+Please enter the follwing into your terminal
+ssh -i "foo.pem" ubuntu@ec2-18-188-34-221.us-east-2.compute.amazonaws.com
+Then type on the remote server to set your password: sudo passwd ubuntu
+Login with the username ubuntu with the password you just set at RStudio Server: 18.188.34.221:8787
 ```
 
 Once you hear a ding, try connecting to the database using the instructions above. 
