@@ -103,7 +103,7 @@ ec2_instance_create <- function(ImageId = NA,
                             SecurityGroupIds = list(SecurityGroupId))
 }
 
-if(TRUE) {
+if(FALSE) {
   ec2_instance_create(ImageId = 'ami-0c55b159cbfafe1f0',
                       KeyName = 'Shiny',
                       InstanceType = 't2.large',
