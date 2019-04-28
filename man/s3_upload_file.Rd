@@ -4,7 +4,8 @@
 \alias{s3_upload_file}
 \title{upload_file}
 \usage{
-s3_upload_file(bucket, from, to)
+s3_upload_file(bucket, from, to, make_public = FALSE,
+  region = "us-east-2")
 }
 \arguments{
 \item{bucket}{Bucket to upload to}
@@ -12,6 +13,10 @@ s3_upload_file(bucket, from, to)
 \item{from}{File to upload}
 
 \item{to}{S3 object name.}
+
+\item{make_public}{boolean}
+
+\item{region}{To create url for file}
 }
 \description{
 upload_file
