@@ -41,14 +41,81 @@ ec2_instance_stop = function(ids, terminate = FALSE) {
 }
 
 #' ec2_instance_create
-#' @param resource The result of resource_ec2
 #' @param ImageId An aws ec2 id: i.e., 'ami-0174e69c12bae5410'
 #' @param InstanceType See \url{https://aws.amazon.com/ec2/instance-types/}
+#' @param min min instances
+#' @param max max instances
+#' @param KeyName A .pem file to ssh
+#' @param SecurityGroupId SecurityGroupId of security group you have created in UI
 #' @export ec2_instance_create
-ec2_instance_create <- function(ImageId = NA, InstanceType='t2.nano', min = 1, max = 1) {
+ec2_instance_create <- function(ImageId = NA,
+                                InstanceType='t2.nano',
+                                min = 1,
+                                max = 1,
+                                KeyName = NA,
+                                SecurityGroupId = NA) {
+  if(is.na(KeyName)) {
+    stop("Please input a KeyName or create one using the AWS UI.")
+  }
+
+  message(
+    "Once the server is complete, you will receive a default message from textbelt.com"
+  )
+
+  user_data = paste( '#!/bin/bash',
+                     'echo "test" > /tmp/hello',
+                     'sudo apt update',
+
+                     # Load postgres
+                     'sudo apt install postgresql postgresql-contrib -y',
+                     'CONF_FILE=$(find / -name "postgresql.conf" | grep main)',
+                     'PG_FILE=$(find / -name "pg_hba.conf" | grep main)',
+                     'echo "listen_addresses = \'*\'" >> $CONF_FILE',
+                     'echo "host    all             all             0.0.0.0/0               md5" >> $PG_FILE',
+                     'echo "host    all             all             ::/0                    md5" >> $PG_FILE',
+                     'echo "#!/bin/bash" >> /tmp/update_pass',
+                     'echo  "sudo -u postgres -H -- psql -c \\"ALTER USER postgres PASSWORD \'myPassword\'\\"" >> /tmp/update_pass',
+                     'sh /tmp/update_pass',
+                     'service postgresql stop',
+                     'service postgresql start',
+
+                     # Send Notification
+                     '/usr/bin/curl -X POST https://textbelt.com/text \\
+                              --data-urlencode phone=\'2549318313\' \\
+                              --data-urlencode message=\'Find Your Phone!\' \\
+                              -d key=textbelt',
+
+                     # Something else
+                     sep = "\n")
+
+  message(
+    user_data
+  )
+
   resource = resource_ec2()
+
   resource$create_instances(ImageId = ImageId,
                             MinCount = as.integer(min),
                             MaxCount = as.integer(max),
-                            InstanceType='t3.micro')
+                            InstanceType=InstanceType,
+                            UserData = user_data,
+                            KeyName = KeyName,
+                            SecurityGroupIds = list(SecurityGroupId))
+}
+
+if(TRUE) {
+  ec2_instance_create(ImageId = 'ami-0c55b159cbfafe1f0',
+                      KeyName = 'Shiny',
+                      InstanceType = 't2.large',
+                      SecurityGroupId = 'sg-0e8841d7a144aa628')
+  instances = ec2_get_info()
+  instances %>%
+    filter(launch_time == max(launch_time)) %>%
+    .[1,1] %>%
+    as.character() %>%
+    str_replace_all("\\.", "\\-") %>%
+    paste0('ssh -i "Shiny.pem" ubuntu@ec2-',
+           .,
+           '.us-east-2.compute.amazonaws.com') %>%
+    cat
 }
