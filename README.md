@@ -34,11 +34,11 @@ cost_get(from = '2019-04-25', to = '2019-04-28')
 
 ## EC2
 
-### Connecting to an ec2 client
+### Connecting to client and resource functions
 
-Client is a lower level wrapper. Most functions will use the resource function.
+Client is a lower level wrapper. Most functions will use the either the resource or client classes. Look for functions starting with `client_` and `resource_`
 ```{r}
-client = client_ec2()
+client = client_s3()
 ```
 
 ### Connecting to an ec2 resource
@@ -214,7 +214,8 @@ Upload a file using `s3_upload_file`
 s3_upload_file(
     bucket = 'freddydbucket', 
     from = 'NAMESPACE', 
-    to = 'uploaded_NAMESPACE'
+    to = 'uploaded_NAMESPACE',
+    make_public = TRUE
 )
 ```
 
@@ -225,5 +226,44 @@ s3_download_file(
     from = 'uploaded_NAMESPACE', 
     to = 'downloaded_NAMESPACE'
 )
+```
+
+Get buckets
+```{r}
+s3_list_buckets()
+```
+
+```
+# A tibble: 5 x 2
+  name             creation_date            
+  <chr>            <chr>                    
+1 couch-dog-photos 2019-03-08 04:45:05+00:00
+2 fdrennan         2019-04-28 23:47:46+00:00
+3 freddydbucket    2019-04-27 23:24:09+00:00
+4 freddydrennan    2019-04-27 23:11:58+00:00
+5 kerasmods        2019-01-29 20:47:11+00:00
+```
+
+Get objects in a bucket
+```{r}
+s3_list_objects('kerasmods')
+```
+
+```
+              key   size                               etag storage_class
+1           data1      5 "89d903bc35dede724fd52c51437ff5fd"      STANDARD
+2       ex-sync.R      0 "d41d8cd98f00b204e9800998ecf8427e"      STANDARD
+3      model.hdf5 780504 "28527b706de60289e5b9ec6b67b67a1a"      STANDARD
+4 number_data.txt 519638 "e9157d53258f3f4a3459f421fec4ad2e"      STANDARD
+                                                          owner_id
+1 f5ac91d6b469e68df6c3dd63bb4fa514c940fe9592974de874d71355978ce9f9
+2 f5ac91d6b469e68df6c3dd63bb4fa514c940fe9592974de874d71355978ce9f9
+3 f5ac91d6b469e68df6c3dd63bb4fa514c940fe9592974de874d71355978ce9f9
+4 f5ac91d6b469e68df6c3dd63bb4fa514c940fe9592974de874d71355978ce9f9
+              last_modified
+1 2019-01-30 09:05:19+00:00
+2 2019-01-30 09:03:00+00:00
+3 2019-01-30 09:14:16+00:00
+4 2019-01-30 15:34:04+00:00
 ```
 
