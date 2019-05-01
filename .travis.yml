@@ -15,7 +15,7 @@ addons:
   apt:
     packages:
       - python3
-      = python2.7
+      - python2.7
 
 before_install:
   - pip install numpy scipy awscli boto3
