@@ -6,14 +6,7 @@ dist: trusty
 cache: packages
 
 before_install:
-  - sudo apt-get update
-  - sudo apt-get install python3
-  - sudo apt-get install python3-pip
-  - pip install --upgrade --ignore-installed --user travis virtualenv
-  - R CMD INSTALL .
-  - virtualenv -p /usr/bin/python3 venv
-  - source venv/bin/activate
-  - pip3 install numpy scipy awscli boto3
+  - pip install numpy
 
 env:
  global:
