@@ -4,7 +4,7 @@
 #' @export user_data_gen
 user_data_gen <- function(postgres_password = 'postgres',
                           phone_number      = NA) {
-browser()
+
   if(is.na(phone_number)) {
     phone_number = 5555555555
   } else {
