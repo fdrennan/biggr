@@ -3,7 +3,7 @@
 language: R
 warnings_are_errors: false
 sudo: required
-dist: trusty
+dist: xenial
 cache: packages
 
 before_install:
