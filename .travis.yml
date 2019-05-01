@@ -11,6 +11,12 @@ r:
   - 3.4
   - 3.5
 
+addons:
+  apt:
+    packages:
+      - python3
+      = python2.7
+
 before_install:
   - pip install numpy scipy awscli boto3
 
@@ -29,8 +35,3 @@ r_packages:
    - tibble
 
 
-
-addons:
-  apt:
-    packages:
-      - python2.7
