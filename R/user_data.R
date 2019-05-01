@@ -4,7 +4,7 @@
 #' @export user_data_gen
 user_data_gen <- function(postgres_password = 'postgres',
                           phone_number      = NA) {
-
+browser()
   if(is.na(phone_number)) {
     phone_number = 5555555555
   } else {
@@ -24,6 +24,8 @@ user_data_gen <- function(postgres_password = 'postgres',
                      'sudo apt-get install libssh2-1-dev -y',
                      'sudo apt-get install gdebi-core',
                      'sudo apt-get install python3-pip -y',
+                     'sudo apt-get install libpq-dev -y',
+                     'sudo apt-get install libxml2-dev -y',
                      'sudo /usr/bin/pip3 install virtualenv',
                      'sudo apt-get install python3-venv',
                      'wget https://download2.rstudio.org/server/trusty/amd64/rstudio-server-1.2.1335-amd64.deb',

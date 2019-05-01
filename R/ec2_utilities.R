@@ -67,7 +67,8 @@ ec2_instance_create <- function(ImageId = NA,
                                 InstanceStorage = 50,
                                 postgres_password = 'password',
                                 phone_number = NA,
-                                DeviceName = "/dev/sda1") {
+                                DeviceName = "/dev/sda1",
+                                user_data = NA) {
   if(is.na(KeyName)) {
     stop("Please input a KeyName or create one using the AWS UI.")
   }
@@ -77,17 +78,21 @@ ec2_instance_create <- function(ImageId = NA,
     message(SecurityGroupId)
   }
 
-  user_data <- user_data_gen(postgres_password = postgres_password,
-                             phone_number = phone_number)
+  if(is.na(user_data)) {
+    user_data <- user_data_gen(postgres_password = postgres_password,
+                               phone_number      = phone_number)
+  } else {
+    message(user_data)
+  }
 
   resource = resource_ec2()
 
-  resource$create_instances(ImageId = ImageId,
-                            MinCount = as.integer(min),
-                            MaxCount = as.integer(max),
-                            InstanceType=InstanceType,
-                            UserData = user_data,
-                            KeyName = KeyName,
+  resource$create_instances(ImageId      = ImageId,
+                            MinCount     = as.integer(min),
+                            MaxCount     = as.integer(max),
+                            InstanceType = InstanceType,
+                            UserData     = user_data,
+                            KeyName      = KeyName,
                             SecurityGroupIds = list(SecurityGroupId),
                             BlockDeviceMappings = list(
                               list(

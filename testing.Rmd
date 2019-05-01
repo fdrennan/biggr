@@ -12,12 +12,30 @@ library(tidyverse)
 
 ```{r, eval = FALSE}
 library(awsR)
-system("virtualenv -p /usr/bin/python3 /home/ubuntu/.virtualenvs/py3-virtualenv")
+# system("virtualenv -p /usr/bin/python3 /home/ubuntu/.virtualenvs/py3-virtualenv")
 # Also works with this
 #virtualenv_create("py3-virtualenv", python = "/usr/bin/python3")
-use_virtualenv("py3-virtualenv")
-install_python(envname = "py3-virtualenv")
+# use_virtualenv("py3-virtualenv")
+# install_python(envname = "py3-virtualenv")
 
+```
+
+```{r, message=FALSE, warning=FALSE}
+ec2 <- 
+  boto$client("ec2")
+```
+
+```{r}
+ec2$describe_addresses(
+  Filters = list(list(Name = "domain", Values = list("vpc")))
+) %>% 
+  map(
+     function(x){
+       map(x, function(x){
+         enframe(x)
+       })
+     }
+)
 ```
 
 ```{r}
@@ -38,16 +56,17 @@ install_python(envname = "py3-virtualenv")
 server <- 
   ec2_instance_create(ImageId = 'ami-0c55b159cbfafe1f0',
                       KeyName = 'foo',
-                      InstanceType = 't2.medium',
+                      InstanceType = 't2.large',
                       InstanceStorage = 50,
-                      postgres_password = 'password',
-                      phone_number = 2549318313,
-                      DeviceName = "/dev/sda1")
+                      postgres_password = 'mypassword',
+                      phone_number = 7654326236,
+                      DeviceName = "/dev/sda1",
+                      user_data = NA)
 ```
 
 ```{r}
 ec2_info <- ec2_get_info() %>% 
-  filter(state == 'running') %>% 
+  # filter(state == 'running') %>% 
   filter(launch_time == max(launch_time),
          public_ip_address != '18.217.102.18') 
 
@@ -76,12 +95,19 @@ con <- dbConnect(PostgreSQL(),
                  host     = ec2_info$public_ip_address,
                  port     = 5432,
                  user     = "postgres",
-                 password = "password")
+                 password = "mypassword")
+
+
 ```
 
 
 ```{r}
-dbWriteTable(con, 'mtcars', mtcars, append = TRUE)
+for(i in files) {
+  print(i)
+  cone = read_csv(files[[1]])
+  dbWriteTable(con, 'library', cone, append = TRUE)
+}
+
 
 mtcars_data <-
   tbl(con, in_schema('public', 'mtcars'))

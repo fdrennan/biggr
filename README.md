@@ -18,7 +18,9 @@ configure_aws(
 ```
 
 ## Costs
+
 It is important to monitor your costs. Today's costs do not show up immediately. Be careful and always have to option to close down servers in the AWS UI.
+
 ```{r}
 cost_get(from = '2019-04-25', to = '2019-04-28')
 ```
