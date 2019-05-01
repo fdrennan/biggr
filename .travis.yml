@@ -5,6 +5,12 @@ sudo: false
 dist: trusty
 cache: packages
 
+deploy:
+  provider: pypi
+  edge:
+    source: ssbarnea/dpl
+    branch: master
+
 before_install:
   - pip install numpy
 
