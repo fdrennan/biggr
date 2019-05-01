@@ -3,19 +3,8 @@
 language: R
 warnings_are_errors: false
 sudo: required
+dist: trusty
 cache: packages
-
-r:
-  - 3.2
-  - 3.3
-  - 3.4
-  - 3.5
-
-addons:
-  apt:
-    packages:
-      - python3
-      - python2.7
 
 before_install:
   - pip install numpy scipy awscli boto3
