@@ -5,6 +5,9 @@ sudo: required
 dist: xenial
 cache: packages
 
+deploy:
+  provider: pypi
+
 before_install:
   - pip install numpy scipy awscli boto3
 
