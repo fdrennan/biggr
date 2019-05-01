@@ -1,4 +1,5 @@
 #' ec2_get_info
+#' @importFrom lubridate ymd_hms
 #' @export ec2_get_info
 ec2_get_info <- function() {
   ec2_con = client_ec2()
@@ -56,6 +57,7 @@ ec2_instance_stop = function(ids, terminate = FALSE) {
 #' @param InstanceStorage Size of the box in gb
 #' @param postgres_password password for postgres database. username is postgres
 #' @param phone_number For notification of completion
+#' @param user_data A shell script that runs on startup
 #' @param DeviceName  "/dev/sda1"
 #' @export ec2_instance_create
 ec2_instance_create <- function(ImageId = NA,

@@ -1,7 +1,7 @@
-#' create_bucket
+#' s3_create_bucket
 #' @param bucket_name A name for the bucket
 #' @param location An AWS region. Defaults to us-east-2
-#' @export create_bucket
+#' @export s3_create_bucket
 s3_create_bucket <- function(bucket_name = NA, location = 'us-east-2') {
   message(
     'Bucket name should conform with DNS requirements:
@@ -48,6 +48,10 @@ s3_list_buckets <- function() {
 
 #' s3_list_objects
 #' @param bucket_name bucket_name
+#' @importFrom dplyr if_else
+#' @importFrom dplyr transmute
+#' @importFrom purrr map_df
+#' @importFrom tibble tibble
 #' @export s3_list_objects
 s3_list_objects <- function(bucket_name = NA) {
 
@@ -74,7 +78,9 @@ s3_list_objects <- function(bucket_name = NA) {
 
 
 #' s3_put_object_acl
-#' @param bucket_name bucket_name
+#' @param bucket bucket_name
+#' @param file file name
+#' @param ACL  permissions type
 #' @export s3_put_object_acl
 s3_put_object_acl <- function(bucket = NA,
                               file   = NA,
@@ -93,7 +99,7 @@ s3_put_object_acl <- function(bucket = NA,
 #' @param to S3 object name.
 #' @param make_public boolean
 #' @param region To create url for file
-#' @export upload_file
+#' @export s3_upload_file
 s3_upload_file <- function(bucket,
                            from,
                            to,

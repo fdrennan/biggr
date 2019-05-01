@@ -8,6 +8,7 @@ subprocess <- NULL
 #' sys module
 sys <- NULL
 
+#' @import reticulate
 .onLoad <- function(libname, pkgname) {
   # use superassignment to update global reference to scipy
   scipy <<- reticulate::import("scipy", delay_load = TRUE)

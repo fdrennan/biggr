@@ -7,7 +7,11 @@
 s3_put_object_acl(bucket = NA, file = NA, ACL = "public-read")
 }
 \arguments{
-\item{bucket_name}{bucket_name}
+\item{bucket}{bucket_name}
+
+\item{file}{file name}
+
+\item{ACL}{permissions type}
 }
 \description{
 s3_put_object_acl

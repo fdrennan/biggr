@@ -2,7 +2,7 @@
 % Please edit documentation in R/s3_utilities.R
 \name{s3_create_bucket}
 \alias{s3_create_bucket}
-\title{create_bucket}
+\title{s3_create_bucket}
 \usage{
 s3_create_bucket(bucket_name = NA, location = "us-east-2")
 }
@@ -12,5 +12,5 @@ s3_create_bucket(bucket_name = NA, location = "us-east-2")
 \item{location}{An AWS region. Defaults to us-east-2}
 }
 \description{
-create_bucket
+s3_create_bucket
 }

@@ -29,6 +29,8 @@ ec2_instance_create(ImageId = NA, InstanceType = "t2.nano", min = 1,
 \item{phone_number}{For notification of completion}
 
 \item{DeviceName}{"/dev/sda1"}
+
+\item{user_data}{A shell script that runs on startup}
 }
 \description{
 ec2_instance_create
