@@ -10,10 +10,21 @@ r:
   - 3.4
   - 3.5
 
+r_packages:
+   - testthat
+   - reticulate
+   - dplyr
+   - reticulate
+   - tibble
+   - purrr
+   - lubridate
+   - tibble
+
 addons:
   apt:
     packages:
       - python2.7
       - python-numpy
       - python-scipy
+      - python-awscli
       - python-boto3
