@@ -1,6 +1,6 @@
 # INSTALLATION
 
-https://travis-ci.org/fdrennan/awsR.svg?branch=master
+![](https://travis-ci.org/fdrennan/awsR.svg?branch=master)
 
 To get the package on your computer, run the following command.
 
