@@ -5,8 +5,12 @@ sudo: required
 dist: xenial
 cache: packages
 
-deploy:
-  provider: pypi
+before_script:
+  - sudo apt-get update
+  - sudo apt-get install python3
+  - pip install --upgrade --ignore-installed --user travis virtualenv
+  - R CMD INSTALL .
+
 
 before_install:
   - pip install numpy scipy awscli boto3
