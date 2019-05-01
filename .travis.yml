@@ -1,17 +1,16 @@
 # R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
 language: R
+warnings_are_errors: false
 sudo: false
+dist: trusty
 cache: packages
 
-#matrix: 3x Linux, 1x OS X
-matrix:
-  include:
-  - r: release
-  - r: oldrel
-  - r: devel
-  - os: osx
-    r: release
-    latex: false
+before_install:
+  - pip install --user numpy scipy awscli boto3
+
+env:
+ global:
+   - CRAN: http://cran.rstudio.com
 
 r_packages:
    - testthat
@@ -22,11 +21,5 @@ r_packages:
    - purrr
    - lubridate
    - tibble
-
-r_github_packages:
-  - fdrennan/awsR
-
-after_success:
-  - Rscript -e 'covr::codecov()'
 
 
