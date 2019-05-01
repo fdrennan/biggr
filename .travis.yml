@@ -15,11 +15,8 @@ env:
 matrix:
   include:
   - r: release
-  - r: oldrel
-  - r: devel
   - os: osx
-    r: release
-    latex: false
+  - os: linux
 
 r_github_packages:
   - jimhester/covr
