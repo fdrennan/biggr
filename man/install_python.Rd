@@ -11,6 +11,8 @@ install_python(method = "auto", conda = "auto",
 \item{method}{method argument for py_install}
 
 \item{conda}{conda argument for py_install}
+
+\item{envname}{a conda or python virtual environment name}
 }
 \description{
 install_python: sets up python environment for awsR

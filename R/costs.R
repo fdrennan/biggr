@@ -1,4 +1,15 @@
 #' cost_get
+#' cost_get
+#' A function to get cost on a specified date range. It defaults to a monthly
+#' range if from io are not specified
+#' @importFrom lubridate floor_date
+#' @importFrom lubridate ceiling_date
+#' @importFrom purrr %>%
+#' @param from The earliest date to grab data. No longer than a year ago.
+#' @param to The latest date to grab data. No later than the end of the month.
+#' @return Current AWS costs
+#' @examples
+#' cost_get(from = '2019-01-01', to = '2019-03-05')
 #' @export cost_get
 cost_get <- function(from = NA, to = NA) {
 

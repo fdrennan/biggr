@@ -1,0 +1,38 @@
+# R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
+language: R
+warnings_are_errors: false
+sudo: false
+dist: trusty
+cache: packages
+
+before_install:
+  - pip install --user numpy scipy awscli boto3
+
+env:
+ global:
+   - CRAN: http://cran.rstudio.com
+
+matrix:
+  include:
+  - r: release
+  - r: oldrel
+  - r: devel
+  - os: osx
+    r: release
+    latex: false
+
+r_github_packages:
+  - jimhester/covr
+
+r_packages:
+   - testthat
+   - reticulate
+   - dplyr
+   - reticulate
+   - tibble
+   - purrr
+   - lubridate
+   - tibble
+
+after_success:
+  - Rscript -e 'covr::codecov()'
