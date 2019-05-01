@@ -5,18 +5,15 @@ sudo: false
 dist: trusty
 cache: packages
 
-before_script:
+before_install:
   - sudo apt-get update
   - sudo apt-get install python3
   - sudo apt-get install python3-pip
-  - virtualenv -p /usr/bin/python2.7 venv
-  - source venv/bin/activate
   - pip install --upgrade --ignore-installed --user travis virtualenv
   - R CMD INSTALL .
-
-
-before_install:
-  - pip install numpy scipy awscli boto3
+  - virtualenv -p /usr/bin/python3 venv
+  - source venv/bin/activate
+  - pip3 install numpy scipy awscli boto3
 
 env:
  global:
