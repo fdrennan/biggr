@@ -10,6 +10,13 @@ r:
   - 3.4
   - 3.5
 
+before_install:
+  - pip install numpy scipy awscli boto3
+
+env:
+ global:
+   - CRAN: http://cran.rstudio.com
+
 r_packages:
    - testthat
    - reticulate
@@ -20,11 +27,9 @@ r_packages:
    - lubridate
    - tibble
 
+
+
 addons:
   apt:
     packages:
       - python2.7
-      - python-numpy
-      - python-scipy
-      - python-awscli
-      - python-boto3
