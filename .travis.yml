@@ -16,8 +16,13 @@ matrix:
   include:
   - r: release
   - os: linux
+  
+r_github_packages:
+  - jimhester/covr
 
-
+after_success:
+  - Rscript -e 'covr::codecov(token = "8f1f8ab4-c78c-478a-9522-9ec3b6dd1d90")'
+  
 r_packages:
    - testthat
    - reticulate
@@ -27,10 +32,3 @@ r_packages:
    - purrr
    - lubridate
    - tibble
-
-r_github_packages:
-  - jimhester/covr
-  - fdrennan/awsR
-
-after_success:
-  - Rscript -e 'covr::codecov(token = "8f1f8ab4-c78c-478a-9522-9ec3b6dd1d90")'
