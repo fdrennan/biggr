@@ -18,7 +18,7 @@ matrix:
   - os: linux
 
 r_github_packages:
-  - jimhester/covr
+  - r-lib/covr
 
 r_packages:
    - testthat
