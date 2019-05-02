@@ -7,3 +7,5 @@ foo.pem
 script.R
 testing.Rmd
 aswserver.pem
+mtcars
+tests/testthat/mtcars
