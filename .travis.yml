@@ -17,11 +17,6 @@ matrix:
   - r: release
   - os: linux
 
-r_github_packages:
-  - jimhester/covr
-
-after_success:
-  - Rscript -e 'covr::codecov()'
 
 r_packages:
    - testthat
@@ -33,3 +28,9 @@ r_packages:
    - lubridate
    - tibble
 
+r_github_packages:
+  - jimhester/covr
+  - fdrennan/awsR
+
+after_success:
+  - Rscript -e 'covr::codecov()'
