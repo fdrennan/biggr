@@ -11,7 +11,8 @@ NULL
 if(getRversion() >= "2.15.1")  {
   utils::globalVariables(
     c(
-      ".",  "Key", "Size", "ETag", "StorageClass", "Owner.ID", "LastModified", "Keep"
+      ".",  "Key", "Size", "ETag", "StorageClass", "Owner.ID", "LastModified", "Keep",
+      "group_name", "group_id"
     )
   )
 }

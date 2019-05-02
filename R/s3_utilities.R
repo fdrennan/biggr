@@ -13,11 +13,28 @@ s3_create_bucket <- function(bucket_name = NA, location = 'us-east-2') {
     - Cannot contain dashes next to periods (e.g., "my-.bucket.com" and "my.-bucket" are invalid)'
   )
   s3 = client_s3()
-  s3$create_bucket(Bucket=bucket_name,
-                   CreateBucketConfiguration=list(LocationConstraint= location))
+  response <-
+    s3$create_bucket(Bucket=bucket_name,
+                     CreateBucketConfiguration=list(LocationConstraint= location))
 
+  response$Location
 
 }
+
+#' s3_create_bucket
+#' @param bucket_name A name for the bucket
+#' @export s3_delete_bucket
+s3_delete_bucket <- function(bucket_name = NA) {
+  s3 = client_s3()
+  response <-
+    try(s3$delete_bucket(Bucket = bucket_name))
+  if(
+    response$ResponseMetadata$HTTPStatusCode == 204
+  ) {
+    return(TRUE)
+  }
+}
+
 
 #' s3_download_file
 #' @param bucket Bucket to upload to
@@ -31,10 +48,12 @@ s3_download_file <- function(bucket, from, to) {
                    Filename = to,
                    Key = from)
 
-
+  TRUE
 }
 
 #' s3_list_buckets
+#' @importFrom purrr map_df
+#' @importFrom tibble tibble
 #' @export s3_list_buckets
 s3_list_buckets <- function() {
   s3 = client_s3()
@@ -45,13 +64,13 @@ s3_list_buckets <- function() {
     })
 }
 
-
 #' s3_list_objects
 #' @param bucket_name bucket_name
 #' @importFrom dplyr if_else
 #' @importFrom dplyr transmute
 #' @importFrom purrr map_df
 #' @importFrom tibble tibble
+#' @importFrom tibble as_tibble
 #' @export s3_list_objects
 s3_list_objects <- function(bucket_name = NA) {
 
@@ -59,6 +78,10 @@ s3_list_objects <- function(bucket_name = NA) {
 
   results <-
     s3$list_objects(Bucket=bucket_name)
+
+  if(is.null(results$Contents)) {
+    return(FALSE)
+  }
 
   results$Contents %>%
     map_df(function(x) {
@@ -71,11 +94,9 @@ s3_list_objects <- function(bucket_name = NA) {
         storage_class = as.character(StorageClass),
         owner_id = as.character(Owner.ID),
         last_modified = as.character(LastModified)
-      )
+      ) %>%
+    as_tibble
 }
-
-
-
 
 #' s3_put_object_acl
 #' @param bucket bucket_name
@@ -126,5 +147,24 @@ s3_upload_file <- function(bucket,
   )
 
   paste0('https://s3.us-east-2.amazonaws.com/', bucket,'/', to)
+
+}
+
+#' s3_delete_file
+#' @param bucket Bucket to upload to
+#' @param file File to delete
+#' @export s3_delete_file
+s3_delete_file <- function(bucket,
+                           file) {
+
+  s3 = client_s3()
+
+  response <-
+    s3$delete_object(Bucket   = bucket,
+                     Key      = file)
+
+  if(response$ResponseMetadata$HTTPStatusCode == 204) {
+    TRUE
+  }
 
 }

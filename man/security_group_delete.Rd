@@ -2,7 +2,7 @@
 % Please edit documentation in R/security_groups.R
 \name{security_group_delete}
 \alias{security_group_delete}
-\title{security_group_create}
+\title{security_group_delete}
 \usage{
 security_group_delete(security_group_id)
 }
@@ -10,5 +10,5 @@ security_group_delete(security_group_id)
 \item{security_group_id}{a security group ID}
 }
 \description{
-security_group_create
+security_group_delete
 }

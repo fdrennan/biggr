@@ -32,7 +32,7 @@ ec2_get_info <- function() {
 ec2_instance_stop = function(ids, terminate = FALSE) {
 
   if(terminate) {
-    resp <- readline(prompt="Are you sure you want to terminate this instace? All data will be destroyed - y/n: ")
+    resp <- readline(prompt="Are you sure you want to terminate this instance? All data will be destroyed - y/n: ")
     if(resp != 'y') {
       stop()
     }

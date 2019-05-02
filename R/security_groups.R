@@ -1,25 +1,41 @@
+#' security_group_list
+#' @importFrom purrr map_df
+#' @importFrom tibble tibble
+#' @export security_group_list
+security_group_list <- function() {
+  resource <- resource_ec2()
+  client <- client_ec2()
+
+  response <- client$describe_security_groups()
+  response <- response$SecurityGroups
+
+  security_group_list <-
+    map_df(response, function(x) {
+      tibble(group_name = x$GroupName,
+             group_id = x$GroupId)
+    })
+
+  security_group_list
+}
+
+
 #' security_group_create
 #' @importFrom purrr keep
+#' @importFrom dplyr filter
+#' @importFrom dplyr pull
 #' @export security_group_create
 security_group_create <- function() {
 
   resource <- resource_ec2()
   client <- client_ec2()
 
-  security_group_names <-
-    keep(client$describe_security_groups(), function(x) {
-      # browser()
-      if(!is.na(x[[1]]['GroupName'])) {
-        x[[1]]['GroupName'] == "prog_r"
-      } else {
-        FALSE
-      }
-    })
+  security_group_df <- security_group_list()
 
-  if(length(security_group_names) == 0) {
+  if(!any(security_group_df$group_name == "prog_r")) {
     create_security <-
       resource$create_security_group(
-        GroupName='prog_r',Description='for automated server'
+        GroupName='prog_r',
+        Description='for automated server'
       )
 
     create_security$authorize_ingress(
@@ -33,15 +49,17 @@ security_group_create <- function() {
       create_security$id
 
   } else {
-    security_group_id = security_group_names$SecurityGroups[[1]]$GroupId
+    security_group_id = security_group_df %>%
+      filter(group_name == "prog_r") %>%
+      pull(group_id)
   }
 
   security_group_id
 }
 
-#' security_group_create
+#' security_group_delete
 #' @param security_group_id  a security group ID
-#' @export security_group_create
+#' @export security_group_delete
 security_group_delete <- function(security_group_id) {
   client <- client_ec2()
   response = client$delete_security_group(GroupId = security_group_id)
