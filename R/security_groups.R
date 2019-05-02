@@ -39,4 +39,12 @@ security_group_create <- function() {
   security_group_id
 }
 
+#' security_group_create
+#' @param security_group_id  a security group ID
+#' @export security_group_create
+security_group_delete <- function(security_group_id) {
+  client <- client_ec2()
+  response = client$delete_security_group(GroupId = security_group_id)
+  response$ResponseMetadata$HTTPStatusCode
+}
 
