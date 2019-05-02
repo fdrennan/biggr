@@ -1,11 +1,14 @@
 library(awsR)
 
 test_that("s3 bucket creation/deletion works", {
-    bucket_name = "fdrennantestbucket"
-    try(s3_delete_bucket(bucket_name = bucket_name))
-
+    buckets <- s3_list_buckets()
+    bucket_name <- 'fdrennantestbucket'
+    bucket_exists <- bucket_name %in% buckets$name
+    if(bucket_exists) {
+      s3_delete_bucket(bucket_name = bucket_name)
+    }
     expect_equal(
-      s3_create_bucket('fdrennantestbucket'),
+      s3_create_bucket(bucket_name),
       "http://fdrennantestbucket.s3.amazonaws.com/"
     )
 })
