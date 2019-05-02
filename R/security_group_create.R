@@ -1,24 +1,3 @@
-#' security_group_list
-#' @importFrom purrr map_df
-#' @importFrom tibble tibble
-#' @export security_group_list
-security_group_list <- function() {
-  resource <- resource_ec2()
-  client <- client_ec2()
-
-  response <- client$describe_security_groups()
-  response <- response$SecurityGroups
-
-  security_group_list <-
-    map_df(response, function(x) {
-      tibble(group_name = x$GroupName,
-             group_id = x$GroupId)
-    })
-
-  security_group_list
-}
-
-
 #' security_group_create
 #' @importFrom purrr keep
 #' @importFrom dplyr filter
@@ -56,13 +35,3 @@ security_group_create <- function() {
 
   security_group_id
 }
-
-#' security_group_delete
-#' @param security_group_id  a security group ID
-#' @export security_group_delete
-security_group_delete <- function(security_group_id) {
-  client <- client_ec2()
-  response = client$delete_security_group(GroupId = security_group_id)
-  response$ResponseMetadata$HTTPStatusCode
-}
-
