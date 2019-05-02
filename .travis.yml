@@ -20,6 +20,9 @@ matrix:
 r_github_packages:
   - jimhester/covr
 
+after_success:
+  - Rscript -e 'covr::codecov()'
+
 r_packages:
    - testthat
    - reticulate
@@ -30,5 +33,3 @@ r_packages:
    - lubridate
    - tibble
 
-after_success:
-  - Rscript -e 'covr::codecov()'
