@@ -33,4 +33,4 @@ r_github_packages:
   - fdrennan/awsR
 
 after_success:
-  - Rscript -e 'covr::codecov()'
+  - Rscript -e 'covr::codecov(token = "8f1f8ab4-c78c-478a-9522-9ec3b6dd1d90")'
