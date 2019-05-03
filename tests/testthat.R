@@ -1,4 +1,4 @@
 library(testthat)
-library(awsR)
+library(biggr)
 
-test_check("awsR")
+test_check("biggr")
