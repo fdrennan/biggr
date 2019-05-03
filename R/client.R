@@ -1,3 +1,10 @@
+#' boto
+#' @export boto3
+boto3 <- function() {
+  import("boto3")
+}
+
+
 #' client_cost
 #' @export client_cost
 client_cost <- function() {

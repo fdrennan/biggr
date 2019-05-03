@@ -3,7 +3,12 @@
 ![](https://travis-ci.org/fdrennan/awsR.svg?branch=master)
 [![codecov](https://codecov.io/gh/fdrennan/biggr/branch/master/graph/badge.svg)](https://codecov.io/gh/fdrennan/biggr)
 
-To get the package on your computer, run the following command.
+To get the package on your computer, run the following command. I would recommend that only experienced AWS users use this package at this time. When I update the technical documentation, it will be easier for new people to use.
+
+Technical documentation is not ready but will be located here's
+```{r, message=FALSE, warning=FALSE}
+https://fdrennan.github.io/biggr_book/
+```
 
 ```{r}
 devtools::install_github("fdrennan/biggr")
@@ -38,20 +43,6 @@ cost_get(from = '2019-04-25', to = '2019-04-28')
 ```
 
 ## EC2
-
-### Connecting to client and resource functions
-
-Client is a lower level wrapper. Most functions will use the either the resource or client classes. Look for functions starting with `client_` and `resource_`
-```{r}
-client = client_s3()
-```
-
-### Connecting to an ec2 resource
-```{r}
-resource = resource_ec2()
-```
-
-Using the resource connection, you can create, change the status of, and get information about your ec2 instances.
 
 First, if you haven't created a key pair run the following commands. The keyfile will automatically be added to your working directory.
 
@@ -195,7 +186,3 @@ s3_list_objects('kerasmods')
 3 2019-01-30 09:14:16+00:00
 4 2019-01-30 15:34:04+00:00
 ```
-
-imgurl <- "https://icon2.kisspng.com/20180313/fsw/kisspng-feel-myself-mirror-goin-fast-smoke-drink-mirror-cat-5aa7872113adb2.5403862115209285450806.jpg"
-sticker(imgurl, package="hexSticker", p_size=8, s_x=1, s_y=.75, s_width=.6,
-        filename="inst/figures/imgfile.png")
