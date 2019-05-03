@@ -1,7 +1,7 @@
 # INSTALLATION
 
 ![](https://travis-ci.org/fdrennan/awsR.svg?branch=master)
-[![codecov](https://codecov.io/gh/fdrennan/awsR/branch/master/graph/badge.svg)](https://codecov.io/gh/fdrennan/awsR)
+[![codecov](https://codecov.io/gh/fdrennan/biggr/branch/master/graph/badge.svg)](https://codecov.io/gh/fdrennan/biggr)
 
 To get the package on your computer, run the following command.
 

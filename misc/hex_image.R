@@ -1,0 +1,3 @@
+imgurl <- "http://www.belleamibengals.com/bengal_cat_2.png"
+sticker(imgurl, package="hexSticker", p_size=8, s_x=1, s_y=.75, s_width=.6,
+        filename="inst/figures/imgfile.png")
