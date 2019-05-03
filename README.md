@@ -6,12 +6,12 @@
 To get the package on your computer, run the following command.
 
 ```{r}
-devtools::install_github("fdrennan/awsR")
+devtools::install_github("fdrennan/biggr")
 ```
 
 Once installed, run the following.
 ```{r}
-library(awsR)
+library(biggr)
 install_python() # Only need to once
 configure_aws(
           aws_access_key_id     = "XXXXXX",

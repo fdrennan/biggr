@@ -4,12 +4,15 @@
 \alias{user_data_gen}
 \title{user_data_gen}
 \usage{
-user_data_gen(postgres_password = "postgres", phone_number = NA)
+user_data_gen(postgres_password = "postgres", phone_number = NA,
+  null_user = FALSE)
 }
 \arguments{
 \item{postgres_password}{Password for postgres database}
 
 \item{phone_number}{Number to sent you a ding. Message is pointless and nondescript}
+
+\item{null_user}{Blank file for nothing to load on server.}
 }
 \description{
 user_data_gen

@@ -1,4 +1,4 @@
-library(awsR)
+library(biggr)
 
 buckets <- s3_list_buckets()
 bucket_name <- 'fdrennantestbucket'

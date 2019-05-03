@@ -1,4 +1,4 @@
-library(awsR)
+library(biggr)
 library(stringr)
 
 result <- security_group_create()

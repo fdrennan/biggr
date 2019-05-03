@@ -1,4 +1,4 @@
-library(awsR)
+library(biggr)
 library(stringr)
 
 test_that("security_group_list return the correct class", {

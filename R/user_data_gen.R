@@ -1,9 +1,19 @@
 #' user_data_gen
 #' @param postgres_password Password for postgres database
 #' @param phone_number Number to sent you a ding. Message is pointless and nondescript
+#' @param null_user Blank file for nothing to load on server.
 #' @export user_data_gen
 user_data_gen <- function(postgres_password = 'postgres',
-                          phone_number      = NA) {
+                          phone_number      = NA,
+                          null_user         = FALSE) {
+
+  if(null_user) {
+    null_user <- paste(
+      '#!/bin/bash',
+      'echo \'hello\' >> /tmp/tmpfile',
+      sep = "\n"
+    )
+  }
 
   if(is.na(phone_number)) {
     phone_number = 5555555555
@@ -60,5 +70,6 @@ user_data_gen <- function(postgres_password = 'postgres',
   user_data
 
 }
+
 
 

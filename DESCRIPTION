@@ -1,4 +1,4 @@
-Package: awsR
+Package: biggr
 Type: Package
 Title: Convenience Functions For AWS R Users
 Version: 1.2.0

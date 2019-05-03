@@ -1,4 +1,4 @@
-library(awsR)
+library(biggr)
 library(stringr)
 
 test_that("resource_s3 return the correct class", {

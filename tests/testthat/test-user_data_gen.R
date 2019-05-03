@@ -1,4 +1,4 @@
-library(awsR)
+library(biggr)
 library(stringr)
 
 test_that("user_data return the correct values", {
