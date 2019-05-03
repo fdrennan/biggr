@@ -21,7 +21,7 @@ ec2_instance_create <- function(ImageId = NA,
                                 user_data  = NA) {
 
   if(is.na(user_data)) {
-    user_data <- user_data_gen
+    user_data <- user_data_gen(null_user = TRUE)
   }
 
   resource = resource_ec2()
