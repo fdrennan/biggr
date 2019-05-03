@@ -4,12 +4,10 @@
 \alias{ec2_instance_stop}
 \title{ec2_instance_stop}
 \usage{
-ec2_instance_stop(ids, terminate = FALSE)
+ec2_instance_stop(ids)
 }
 \arguments{
 \item{ids}{An aws ec2 id: i.e., 'i-034e6090b1eb879e7'}
-
-\item{terminate}{An boolean to specify whether to stop or terminate}
 }
 \description{
 ec2_instance_stop

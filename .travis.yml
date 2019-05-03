@@ -32,4 +32,3 @@ r_packages:
    - tibble
    - purrr
    - lubridate
-   - tibble

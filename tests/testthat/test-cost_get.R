@@ -1,4 +1,4 @@
-library(awsR)
+library(biggr)
 
 test_that("cost_get returns a dataframe", {
   expect_warning(cost_get())

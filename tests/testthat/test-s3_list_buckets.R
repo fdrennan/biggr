@@ -1,4 +1,4 @@
-library(awsR)
+library(biggr)
 
 test_that("s3 lists return the correct values", {
   response <- s3_list_buckets()

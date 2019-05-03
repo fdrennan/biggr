@@ -6,11 +6,10 @@
 #' @param KeyName A .pem file to ssh
 #' @param SecurityGroupId SecurityGroupId of security group you have created in UI
 #' @param InstanceStorage Size of the box in gb
-#' @param postgres_password password for postgres database. username is postgres
-#' @param phone_number For notification of completion
 #' @param user_data A shell script that runs on startup
 #' @param DeviceName  "/dev/sda1"
 #' @export ec2_instance_create
+
 ec2_instance_create <- function(ImageId = NA,
                                 InstanceType='t2.nano',
                                 min = 1,
@@ -18,32 +17,18 @@ ec2_instance_create <- function(ImageId = NA,
                                 KeyName = NA,
                                 SecurityGroupId = NA,
                                 InstanceStorage = 50,
-                                postgres_password = 'password',
-                                phone_number = NA,
                                 DeviceName = "/dev/sda1",
-                                user_data = NA) {
-  if(is.na(KeyName)) {
-    stop("Please input a KeyName or create one using the AWS UI.")
-  }
-
-  if(is.na(SecurityGroupId)) {
-    SecurityGroupId <- security_group_create()
-    message(SecurityGroupId)
-  }
+                                user_data  = NA) {
 
   if(is.na(user_data)) {
-    user_data <- user_data_gen(postgres_password = postgres_password,
-                               phone_number      = phone_number)
-  } else {
-    message(user_data)
+    user_data <- user_data_gen(null_user = TRUE)
   }
 
   resource = resource_ec2()
-
   resource$create_instances(ImageId      = ImageId,
+                            InstanceType = InstanceType,
                             MinCount     = as.integer(min),
                             MaxCount     = as.integer(max),
-                            InstanceType = InstanceType,
                             UserData     = user_data,
                             KeyName      = KeyName,
                             SecurityGroupIds = list(SecurityGroupId),
@@ -56,5 +41,6 @@ ec2_instance_create <- function(ImageId = NA,
                               )
                             )
   )
+
 }
 

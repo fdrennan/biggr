@@ -6,12 +6,12 @@
 To get the package on your computer, run the following command.
 
 ```{r}
-devtools::install_github("fdrennan/awsR")
+devtools::install_github("fdrennan/biggr")
 ```
 
 Once installed, run the following.
 ```{r}
-library(awsR)
+library(biggr)
 install_python() # Only need to once
 configure_aws(
           aws_access_key_id     = "XXXXXX",
@@ -53,37 +53,27 @@ resource = resource_ec2()
 
 Using the resource connection, you can create, change the status of, and get information about your ec2 instances.
 
-First, if you haven't created a key pair run the following commands. 
+First, if you haven't created a key pair run the following commands. The keyfile will automatically be added to your working directory.
 
 ```{r}
-key_pair <- client_ec2()$create_key_pair(KeyName='foo')
- 
-write.table(key_pair$KeyMaterial,
-            file = 'foo.pem',
-            row.names = FALSE, 
-            col.names = FALSE, 
-            quote = FALSE)
+key_pair <- keyfile_create(keyname = 'mykeypair')
+print(key_pair)
 ```
-
-Then, run `chmod 400 foo.pem`
 
 Now you're ready to create a server. 
 ```{r}
 server <- 
-  ec2_instance_create(ImageId = 'ami-0c55b159cbfafe1f0',
-                      KeyName = 'foo',
-                      InstanceType = 't2.medium',
-                      InstanceStorage = 50,
-                      postgres_password = 'password',
-                      phone_number = 2549318313,
-                      DeviceName = "/dev/sda1")
+    ec2_instance_create(ImageId = 'ami-0c55b159cbfafe1f0',
+                        KeyName = 'mykeypair',
+                        InstanceType = 't2.medium',
+                        InstanceStorage = 50,
+                        SecurityGroupId = 'sg-0e8841d7a144aa628')
 ```
 
 Get the most recent server data 
 ```{r}
 ec2_info <- ec2_get_info() %>% 
-  filter(state == 'running') %>%
-  filter(launch_time == max(launch_time))
+  filter(instance_id == server[[1]]$id) 
 ```
 
 Check out the ec2_instance data
@@ -94,61 +84,13 @@ glimpse(ec2_info)
 ```
 Observations: 1
 Variables: 7
-$ public_ip_address   <chr> "18.188.34.221"
-$ priviate_ip_address <chr> "172.31.12.51"
+$ public_ip_address   <chr> "18.188.56.181"
+$ priviate_ip_address <chr> "172.31.12.87"
 $ image_id            <chr> "ami-0c55b159cbfafe1f0"
-$ instance_id         <chr> "i-09532cd8df558929a"
-$ launch_time         <dttm> 2019-04-28 21:24:38
+$ instance_id         <chr> "i-09a9ffcc5d1dc9af1"
+$ launch_time         <dttm> 2019-05-03 05:43:41
 $ instance_type       <chr> "t2.medium"
 $ state               <chr> "running"
-```
-
-
-Clean version of messaging I need to add to creation function. 
-```{r}
-ec2_info$public_ip_address %>% 
-  str_replace_all('\\.', '\\-') %>% 
-  paste0('ssh -i "foo.pem" ubuntu@ec2-', ., '.us-east-2.compute.amazonaws.com', collapse = "") %>% 
-  paste("Please enter the follwing into your terminal", 
-        ., 
-        'Then type on the remote server to set your password: sudo passwd ubuntu',
-        paste0('Login with the username ubuntu with the password you just set at RStudio Server: ', ec2_info$public_ip_address,  ":8787"),
-        sep = "\n") %>% 
-  message
-```
-
-```
-Please enter the follwing into your terminal
-ssh -i "foo.pem" ubuntu@ec2-18-188-34-221.us-east-2.compute.amazonaws.com
-Then type on the remote server to set your password: sudo passwd ubuntu
-Login with the username ubuntu with the password you just set at RStudio Server: 18.188.34.221:8787
-```
-
-Once you hear a ding, try connecting to the database using the instructions above. 
-```{r}
-library(RPostgreSQL)
-library(tidyverse)
-library(dbplyr)
-library(lubridate)
-library(DBI)
-
-con <- dbConnect(PostgreSQL(),
-                 # dbname   = 'linkedin',
-                 host     = ec2_info$public_ip_address,
-                 port     = 5432,
-                 user     = "postgres",
-                 password = "password")
-```
-
-Write to the database you just made. 
-```{r}
-dbWriteTable(con, 'mtcars', mtcars, append = TRUE)
-
-mtcars_data <-
-  tbl(con, in_schema('public', 'mtcars'))
-  
-head(mtcars_data) %>%
-  collect
 ```
 
 Terminate the instance
@@ -178,40 +120,7 @@ s3_create_bucket(
 ```
 
 ```
-$Location
 [1] "http://freddydbucket.s3.amazonaws.com/"
-
-$ResponseMetadata
-$ResponseMetadata$HostId
-[1] "G43iK+UUYoo31NbHC5QlAD5ci+6EJwbHulr0qNfy54i87jkPsPhcs14haR+Sg9jOgeyV70Z8URY="
-
-$ResponseMetadata$RetryAttempts
-[1] 0
-
-$ResponseMetadata$HTTPStatusCode
-[1] 200
-
-$ResponseMetadata$RequestId
-[1] "F639FDF93B2A8EA2"
-
-$ResponseMetadata$HTTPHeaders
-$ResponseMetadata$HTTPHeaders$date
-[1] "Sat, 27 Apr 2019 23:24:09 GMT"
-
-$ResponseMetadata$HTTPHeaders$`content-length`
-[1] "0"
-
-$ResponseMetadata$HTTPHeaders$`x-amz-request-id`
-[1] "F639FDF93B2A8EA2"
-
-$ResponseMetadata$HTTPHeaders$location
-[1] "http://freddydbucket.s3.amazonaws.com/"
-
-$ResponseMetadata$HTTPHeaders$`x-amz-id-2`
-[1] "G43iK+UUYoo31NbHC5QlAD5ci+6EJwbHulr0qNfy54i87jkPsPhcs14haR+Sg9jOgeyV70Z8URY="
-
-$ResponseMetadata$HTTPHeaders$server
-[1] "AmazonS3"
 ```
 
 Upload a file using `s3_upload_file`
@@ -222,6 +131,12 @@ s3_upload_file(
     to = 'uploaded_NAMESPACE',
     make_public = TRUE
 )
+```
+
+```
+You may need to change the region in the url
+https://s3.us-east-2.amazonaws.com/freddydbucket/uploaded_NAMESPACE
+[1] "https://s3.us-east-2.amazonaws.com/freddydbucket/uploaded_NAMESPACE"
 ```
 
 Download a file using `s3_download_file`
@@ -239,14 +154,23 @@ s3_list_buckets()
 ```
 
 ```
-# A tibble: 5 x 2
-  name             creation_date            
-  <chr>            <chr>                    
-1 couch-dog-photos 2019-03-08 04:45:05+00:00
-2 fdrennan         2019-04-28 23:47:46+00:00
-3 freddydbucket    2019-04-27 23:24:09+00:00
-4 freddydrennan    2019-04-27 23:11:58+00:00
-5 kerasmods        2019-01-29 20:47:11+00:00
+ A tibble: 5 x 2
+  name                     creation_date            
+  <chr>                    <chr>                    
+1 couch-dog-photos         2019-03-08 04:45:05+00:00
+2 fdrennantestbucket844445 2019-05-02 23:44:09+00:00
+3 fdrennanunittest         2019-05-02 21:15:04+00:00
+4 freddydbucket            2019-05-03 05:46:19+00:00
+5 kerasmods                2019-01-29 20:47:11+00:00
+```
+
+Delete Bucket
+```{r}
+s3_delete_bucket('fdrennantestbucket844445')
+```
+
+```
+[1] TRUE
 ```
 
 Get objects in a bucket
@@ -272,3 +196,6 @@ s3_list_objects('kerasmods')
 4 2019-01-30 15:34:04+00:00
 ```
 
+imgurl <- "https://icon2.kisspng.com/20180313/fsw/kisspng-feel-myself-mirror-goin-fast-smoke-drink-mirror-cat-5aa7872113adb2.5403862115209285450806.jpg"
+sticker(imgurl, package="hexSticker", p_size=8, s_x=1, s_y=.75, s_width=.6,
+        filename="inst/figures/imgfile.png")

@@ -1,4 +1,4 @@
-library(awsR)
+library(biggr)
 
 bucket_name <- rand_name()
 

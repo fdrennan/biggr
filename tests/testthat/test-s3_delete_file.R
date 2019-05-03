@@ -1,4 +1,4 @@
-library(awsR)
+library(biggr)
 
 response <- s3_list_objects('fdrennanunittest')
 if(is.data.frame(response)) {

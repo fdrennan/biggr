@@ -1,4 +1,4 @@
-library(awsR)
+library(biggr)
 
 bucket <- 'fdrennanunittest'
 random_file = rand_name()
