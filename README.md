@@ -196,3 +196,6 @@ s3_list_objects('kerasmods')
 4 2019-01-30 15:34:04+00:00
 ```
 
+imgurl <- "https://icon2.kisspng.com/20180313/fsw/kisspng-feel-myself-mirror-goin-fast-smoke-drink-mirror-cat-5aa7872113adb2.5403862115209285450806.jpg"
+sticker(imgurl, package="hexSticker", p_size=8, s_x=1, s_y=.75, s_width=.6,
+        filename="inst/figures/imgfile.png")
