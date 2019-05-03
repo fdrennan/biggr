@@ -1,24 +1,21 @@
 library(awsR)
 
 bucket <- 'fdrennanunittest'
-response <- s3_list_objects(bucket_name = bucket)
-if(!is.data.frame(response)) {
-  if(is.data.frame(response)) {
-    has_mtcars <- "mtcars" %in% response$key
-  } else {
-    has_mtcars <- FALSE
-  }
-  if(!has_mtcars) {
-    write.csv(mtcars, 'mtcars')
-    s3_upload_file(bucket, 'mtcars', 'mtcars')
-  }
-}
+random_file = rand_name()
+file_dir <- tempdir()
+file_location = file.path(file_dir, random_file)
+write.csv(mtcars, file_location)
+s3_upload_file(
+  bucket = bucket,
+  from = file_location,
+  to = random_file
+)
 test_that("s3_download_files downloads files", {
 
   expect_equal(
     s3_download_file(bucket = bucket,
-                     from   = 'mtcars',
-                     to     = '/tmp/mtcars'),
+                     from   = random_file,
+                     to     = file_location),
     TRUE
   )
 
