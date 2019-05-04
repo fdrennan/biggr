@@ -89,11 +89,13 @@ ec2_instance_stop(ids = ec2_info$instance_id, terminate = TRUE)
 
 Modify the instance
 ```{r}
-client$modify_instance_attribute(InstanceId=ec2_info$instance_id, 
-                                 Attribute='instanceType',
-                                 Value='t2.small')
+ec2_instance_modify(instance_id = ec2_info$instance_id,
+                    value       = 't2.small')
+```
 
-client$start_instances(InstanceIds = list(ec2_info$instance_id))
+Start the instance
+```{r}
+ec2_instance_start(ec2_info$instance_id)
 ```
 
 
