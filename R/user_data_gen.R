@@ -1,11 +1,11 @@
-#' user_data_gen
+#' ec2_prebuilt_script
 #' @param postgres_password Password for postgres database
 #' @param phone_number Number to sent you a ding. Message is pointless and nondescript
 #' @param null_user Blank file for nothing to load on server.
-#' @export user_data_gen
-user_data_gen <- function(postgres_password = 'postgres',
-                          phone_number      = NA,
-                          null_user         = FALSE) {
+#' @export ec2_prebuilt_script
+ec2_prebuilt_script <- function(postgres_password = 'postgres',
+                                phone_number      = NA,
+                                null_user         = FALSE) {
 
   if(null_user) {
     null_user <- paste(
