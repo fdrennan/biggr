@@ -1,14 +1,12 @@
 # INSTALLATION
 
+Technical documentation is not complete but is located [here](https://fdrennan.github.io/biggr_book/).
+
 ![](https://travis-ci.org/fdrennan/awsR.svg?branch=master)
 [![codecov](https://codecov.io/gh/fdrennan/biggr/branch/master/graph/badge.svg)](https://codecov.io/gh/fdrennan/biggr)
 
 To get the package on your computer, run the following command. I would recommend that only experienced AWS users use this package at this time. When I update the technical documentation, it will be easier for new people to use.
 
-Technical documentation is not ready but will be located here's
-```{r, message=FALSE, warning=FALSE}
-https://fdrennan.github.io/biggr_book/
-```
 
 ```{r}
 devtools::install_github("fdrennan/biggr")

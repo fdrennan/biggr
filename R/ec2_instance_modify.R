@@ -8,7 +8,7 @@ ec2_instance_modify = function(instance_id = NA,
                                value     = 't2.small') {
 
   client <- client_ec2()
-  resp <- client$modify_instance_attribute(InstanceId = list(instance_id),
+  resp <- client$modify_instance_attribute(InstanceId = instance_id,
                                            Attribute  = attribute,
                                            Value      = value)
   if(resp$ResponseMetadata$HTTPStatusCode == 200) {
