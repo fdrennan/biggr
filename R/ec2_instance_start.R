@@ -4,8 +4,8 @@
 ec2_instance_start = function(instance_id = NA) {
 
   client <- client_ec2()
-  responce <- client$start_instances(InstanceIds = list(instance_id))
-  if(responce$ResponseMetadata$HTTPStatusCode == 200) {
+  response <- client$start_instances(InstanceIds = list(instance_id))
+  if(response$ResponseMetadata$HTTPStatusCode == 200) {
     return(TRUE)
   }
 }
