@@ -32,8 +32,8 @@ ec2_instance_prebuilt <- function(ImageId = NA,
   }
 
   if(is.na(user_data)) {
-    user_data <- user_data_gen(postgres_password = postgres_password,
-                               phone_number      = phone_number)
+    user_data <- ec2_prebuilt_script(postgres_password = postgres_password,
+                                     phone_number      = phone_number)
   } else {
     message(user_data)
   }

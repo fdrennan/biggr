@@ -3,8 +3,8 @@ library(stringr)
 
 test_that("user_data return the correct values", {
   user_data <-
-    user_data_gen(phone_number = 1111111111,
-                  postgres_password = 'postgrespass')
+    ec2_prebuilt_script(phone_number = 1111111111,
+                        postgres_password = 'postgrespass')
 
   expect_equal(
      str_detect(user_data,
@@ -21,7 +21,7 @@ test_that("user_data return the correct values", {
 
 test_that("user_data return the correct values when no phone supplied", {
   user_data <-
-    user_data_gen(postgres_password = 'postgrespass')
+    ec2_prebuilt_script(postgres_password = 'postgrespass')
 
   expect_equal(
     str_detect(user_data,
