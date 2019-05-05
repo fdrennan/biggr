@@ -1,3 +1,0 @@
-library(biggr)
-
-# ec2

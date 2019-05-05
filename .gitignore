@@ -9,3 +9,4 @@ testing.Rmd
 aswserver.pem
 mtcars
 tests/testthat/mtcars
+inst
