@@ -3,4 +3,3 @@
 ^\.Rproj\.user$
 ^codecov\.yml$
 .covrignore
-inst
