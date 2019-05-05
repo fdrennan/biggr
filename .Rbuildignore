@@ -1,11 +1,6 @@
 ^\.travis\.yml$
 ^.*\.Rproj$
 ^\.Rproj\.user$
-foo.pem
-script.R
-testing.Rmd
-script.R
-aswserver.pem
 ^codecov\.yml$
 .covrignore
-mtcars
+

@@ -1,5 +1,4 @@
 #' cost_get
-#' cost_get
 #' A function to get cost on a specified date range. It defaults to a monthly
 #' range if from io are not specified
 #' @importFrom lubridate floor_date
