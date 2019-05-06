@@ -5,10 +5,34 @@ echo 'deb https://cloud.r-project.org/bin/linux/ubuntu disco-cran35/' >> /etc/ap
 
 echo 'Updating server' >> /notes
 sudo apt-get update
+sudo apt-get install unzip -y
+echo "Install Python pip" >> /notes
+sudo apt-get install python-pip -y
+echo "Install Python3 pip" >> /notes
+sudo apt-get install python3-pip -y
+echo "Install Python3 virtualenv" >> /notes
+sudo /usr/bin/pip3 install virtualenv
+echo "Install Python3 Venv" >> /notes
+sudo apt-get install python3-venv -y
+
+install_kaggle=true
+if [ "$install_kaggle" = true ]; then
+
+  echo 'export KAGGLE_USERNAME=fdrennan' >> /home/ubuntu/.bashrc
+  echo 'export KAGGLE_KEY=4c1eb6b5aea57b562fd468e57c366480' >> /home/ubuntu/.bashrc
+  echo 'export PATH="/home/ubuntu/.local/bin/:$PATH"' >> /home/ubuntu/.bashrc
+  echo "Install Kaggle Command Line" >> /notes
+  sudo -u ubuntu -H -- pip install --user kaggle
+
+fi
+
+install_data=false
+if [ "$install_data" = true]; then
+  kaggle datasets download -d new-york-city/nyc-parking-tickets
+fi
 
 install_r=false
 if [ "$install_r" = true ]; then
-
   echo 'Installing R' >> /notes
   sudo apt-get install r-base -y
   sudo apt-get install libcurl4-openssl-dev -y
@@ -16,11 +40,8 @@ if [ "$install_r" = true ]; then
   sudo apt-get install libssl-dev -y
   sudo apt-get install libssh2-1-dev -y
   sudo apt-get install gdebi-core
-  sudo apt-get install python3-pip -y
   sudo apt-get install libpq-dev -y
   sudo apt-get install libxml2-dev -y
-  sudo /usr/bin/pip3 install virtualenv
-  sudo apt-get install python3-venv
 
   echo 'Installing RStudio Server' >> /notes
   sudo wget https://download2.rstudio.org/server/trusty/amd64/rstudio-server-1.2.1335-amd64.deb
@@ -37,6 +58,7 @@ if [ "$install_r" = true ]; then
   echo 'Installing Shiny Server' >> /notes
   sudo wget https://download3.rstudio.org/ubuntu-14.04/x86_64/shiny-server-1.5.9.923-amd64.deb
   yes | gdebi shiny-server-1.5.9.923-amd64.deb
+
 fi
 
 echo 'Installing Postgres' >> /notes
@@ -58,7 +80,6 @@ wget https://s3.us-east-2.amazonaws.com/fdrennancsv/mtcars.csv
 sudo -u postgres -H -- psql -a -f mtcars.sql
 
 echo 'Finished' >> /notes
-/usr/bin/curl -X POST https://textbelt.com/text \
-                              --data-urlencode phone='5555555555' \
-                              --data-urlencode message='Find Your Phone!' \
-                              -d key=textbelt
+
+
+echo 'Finished' >> /home/ubuntu/finished
