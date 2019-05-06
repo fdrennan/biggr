@@ -1,9 +1,10 @@
-#' ec2_prebuilt_script
+#' ec2_instance_script
 #' @param postgres_password Password for postgres database
 #' @param phone_number Number to sent you a ding. Message is pointless and nondescript
 #' @param null_user Blank file for nothing to load on server.
-#' @export ec2_prebuilt_script
-ec2_prebuilt_script <- function(postgres_password = 'postgres',
+#' @return A bash script
+#' @export ec2_instance_script
+ec2_instance_script <- function(postgres_password = 'postgres',
                                 phone_number      = NA,
                                 null_user         = FALSE) {
 
@@ -70,6 +71,3 @@ ec2_prebuilt_script <- function(postgres_password = 'postgres',
   user_data
 
 }
-
-
-
