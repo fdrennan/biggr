@@ -16,5 +16,10 @@ ec2_instance_terminate = function(ids, force = FALSE) {
         instances$filter(InstanceIds = ids)$terminate()
       return(TRUE)
     }
+  } else {
+    instances = resource$instances
+    response <-
+      instances$filter(InstanceIds = ids)$terminate()
+    return(TRUE)
   }
 }
