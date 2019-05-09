@@ -9,7 +9,6 @@
 #' @param user_data A shell script that runs on startup
 #' @param DeviceName  "/dev/sda1"
 #' @export ec2_instance_create
-
 ec2_instance_create <- function(ImageId = NA,
                                 InstanceType='t2.nano',
                                 min = 1,

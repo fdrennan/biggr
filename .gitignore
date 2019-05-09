@@ -10,3 +10,4 @@ aswserver.pem
 mtcars
 tests/testthat/mtcars
 inst/Shiny.pem
+Shiny.pem
