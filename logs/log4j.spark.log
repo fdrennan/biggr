@@ -1,3 +1,0 @@
-19/05/08 06:48:05 INFO ShutdownHookManager: Shutdown hook called
-19/05/08 06:48:05 INFO ShutdownHookManager: Deleting directory /private/var/folders/1q/j1clv3hj53174q0d05p52fsw0000gn/T/spark-f9f8367d-3053-490f-b59c-ecfae290b774
-19/05/08 06:48:05 INFO ShutdownHookManager: Deleting directory /private/var/folders/1q/j1clv3hj53174q0d05p52fsw0000gn/T/spark-e9add922-0efc-4347-b382-7ebae4bf7bdd
