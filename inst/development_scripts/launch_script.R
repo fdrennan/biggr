@@ -1,20 +1,6 @@
 library(biggr)
 library(tidyverse)
 
-s3_upload_file(
-  'shellscriptsfdrennan',
-  'inst/server_scripts/main_server.sh',
-  'main_server.sh',
-  make_public = TRUE
-)
-
-user_data = paste("#!/bin/bash",
-                  "whoami >> /tmp/whoami",
-                  "pwd >> /tmp/whoami",
-                  "wget https://s3.us-east-2.amazonaws.com/shellscriptsfdrennan/main_server.sh",
-                  "sh main_server.sh >> /home/ubuntu/progress",
-                  sep = "\n")
-
 ec2_instance_create(ImageId = 'ami-0c55b159cbfafe1f0',
                     KeyName = "Shiny",
                     InstanceStorage = 100L,
