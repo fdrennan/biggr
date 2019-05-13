@@ -10,7 +10,7 @@ ec2_instance_create(ImageId = r_box(),
                     InstanceStorage = 35L,
                     SecurityGroupId = 'sg-0e8841d7a144aa628',
                     user_data = user_data,
-                    InstanceType = 't2.large')
+                    InstanceType = 'p2.xlarge')
 
 instances <- ec2_instance_info()
 
@@ -19,7 +19,7 @@ public_ip <-
   filter(launch_time == max(launch_time),
          public_ip_address != "18.217.102.18") %>%
   pull(public_ip_address)
-
+public_ip
 public_ip %>%
   str_replace_all("\\.", "\\-") %>%
   paste0('ssh -i "Shiny.pem" ubuntu@ec2-', ., '.us-east-2.compute.amazonaws.com') %>%
