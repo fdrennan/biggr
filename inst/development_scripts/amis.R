@@ -5,7 +5,7 @@ user_data_ami = paste("#!/bin/bash",
                       "echo launch >> /home/ubuntu/notes",
                       sep = "\n")
 
-ec2_instance_create(ImageId = 'ami-0b7f05434e6a2dfe0',
+ec2_instance_create(ImageId = 'ami-0a6cefb3d207a9d64',
                     KeyName = "Shiny",
                     InstanceStorage = 35L,
                     SecurityGroupId = 'sg-0e8841d7a144aa628',

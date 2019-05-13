@@ -22,7 +22,7 @@ spark_slave <- function(
                         sep = "\n")
 
   for(instance in 1:n_instances) {
-    ec2_instance_create(ImageId = 'ami-00c36ebbb7d6aa249',
+    ec2_instance_create(ImageId = r_box(),
                         KeyName = KeyName,
                         InstanceStorage = InstanceStorage,
                         SecurityGroupId = SecurityGroupId,

@@ -4,3 +4,4 @@
 ^codecov\.yml$
 .covrignore
 inst/Shiny.pem
+Shiny.pem
