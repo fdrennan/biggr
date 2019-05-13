@@ -10,7 +10,7 @@ ec2_instance_create(ImageId = r_box(),
                     InstanceStorage = 35L,
                     SecurityGroupId = 'sg-0e8841d7a144aa628',
                     user_data = user_data,
-                    InstanceType = 'p2.xlarge')
+                    InstanceType = 't2.large')
 
 instances <- ec2_instance_info()
 
