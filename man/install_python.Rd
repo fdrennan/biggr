@@ -4,8 +4,7 @@
 \alias{install_python}
 \title{install_python: sets up python environment for awsR}
 \usage{
-install_python(method = "auto", conda = "auto",
-  envname = "r_reticulate")
+install_python(method = "auto", conda = "auto", envname = "r_reticulate")
 }
 \arguments{
 \item{method}{method argument for py_install}

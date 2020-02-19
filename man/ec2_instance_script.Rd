@@ -4,8 +4,11 @@
 \alias{ec2_instance_script}
 \title{ec2_instance_script}
 \usage{
-ec2_instance_script(postgres_password = "postgres", phone_number = NA,
-  null_user = FALSE)
+ec2_instance_script(
+  postgres_password = "postgres",
+  phone_number = NA,
+  null_user = FALSE
+)
 }
 \arguments{
 \item{postgres_password}{Password for postgres database}

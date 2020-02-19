@@ -4,8 +4,11 @@
 \alias{configure_aws}
 \title{configure_aws}
 \usage{
-configure_aws(aws_access_key_id = NA, aws_secret_access_key = NA,
-  default.region = NA)
+configure_aws(
+  aws_access_key_id = NA,
+  aws_secret_access_key = NA,
+  default.region = NA
+)
 }
 \arguments{
 \item{aws_access_key_id}{IAM access key ID}

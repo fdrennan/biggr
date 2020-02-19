@@ -4,8 +4,11 @@
 \alias{ec2_instance_modify}
 \title{ec2_instance_modify}
 \usage{
-ec2_instance_modify(instance_id = NA, attribute = "instanceType",
-  value = "t2.small")
+ec2_instance_modify(
+  instance_id = NA,
+  attribute = "instanceType",
+  value = "t2.small"
+)
 }
 \arguments{
 \item{instance_id}{An aws ec2 id: i.e., 'i-034e6090b1eb879e7'}

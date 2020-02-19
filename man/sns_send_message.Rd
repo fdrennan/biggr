@@ -4,8 +4,12 @@
 \alias{sns_send_message}
 \title{sns_send_message}
 \usage{
-sns_send_message(phone_number = NA, message = "Hello World!",
-  region = "us-east-1", message_aws = FALSE)
+sns_send_message(
+  phone_number = NA,
+  message = "Hello World!",
+  region = "us-east-1",
+  message_aws = FALSE
+)
 }
 \arguments{
 \item{phone_number}{Recipient phone number}

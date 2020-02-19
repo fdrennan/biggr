@@ -4,11 +4,18 @@
 \alias{rds_instance_create}
 \title{rds_instance_create}
 \usage{
-rds_instance_create(db_instance_identifier = NA,
-  allocated_storage = 10L, database_name = NA, engine = "postgres",
-  storage_type = "gp2", auto_minor_version_upgrade = TRUE,
-  multi_az = FALSE, master_username = NA, master_user_password = NA,
-  database_instance_class = "db.t2.micro")
+rds_instance_create(
+  db_instance_identifier = NA,
+  allocated_storage = 10L,
+  database_name = NA,
+  engine = "postgres",
+  storage_type = "gp2",
+  auto_minor_version_upgrade = TRUE,
+  multi_az = FALSE,
+  master_username = NA,
+  master_user_password = NA,
+  database_instance_class = "db.t2.micro"
+)
 }
 \arguments{
 \item{db_instance_identifier}{NA,}

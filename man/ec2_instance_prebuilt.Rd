@@ -4,10 +4,19 @@
 \alias{ec2_instance_prebuilt}
 \title{ec2_instance_prebuilt}
 \usage{
-ec2_instance_prebuilt(ImageId = NA, InstanceType = "t2.nano",
-  min = 1, max = 1, KeyName = NA, SecurityGroupId = NA,
-  InstanceStorage = 50, postgres_password = "password",
-  phone_number = NA, DeviceName = "/dev/sda1", user_data = NA)
+ec2_instance_prebuilt(
+  ImageId = NA,
+  InstanceType = "t2.nano",
+  min = 1,
+  max = 1,
+  KeyName = NA,
+  SecurityGroupId = NA,
+  InstanceStorage = 50,
+  postgres_password = "password",
+  phone_number = NA,
+  DeviceName = "/dev/sda1",
+  user_data = NA
+)
 }
 \arguments{
 \item{ImageId}{An aws ec2 id: i.e., 'ami-0174e69c12bae5410'}

@@ -4,8 +4,12 @@
 \alias{spark_master}
 \title{spark_master}
 \usage{
-spark_master(InstanceType = "t2.medium", KeyName = NA,
-  SecurityGroupId = NA, InstanceStorage = 50)
+spark_master(
+  InstanceType = "t2.medium",
+  KeyName = NA,
+  SecurityGroupId = NA,
+  InstanceStorage = 50
+)
 }
 \arguments{
 \item{InstanceType}{'t2.medium'}

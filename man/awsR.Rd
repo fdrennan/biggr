@@ -3,7 +3,6 @@
 \docType{package}
 \name{awsR}
 \alias{awsR}
-\alias{awsR-package}
 \title{\code{awsR} package}
 \description{
 Google spreadsheets R API

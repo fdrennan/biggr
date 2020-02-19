@@ -4,9 +4,14 @@
 \alias{spark_slave}
 \title{spark_slave}
 \usage{
-spark_slave(InstanceType = "t2.medium", KeyName = NA,
-  SecurityGroupId = NA, InstanceStorage = 50, n_instances = 2,
-  master_ip = NULL)
+spark_slave(
+  InstanceType = "t2.medium",
+  KeyName = NA,
+  SecurityGroupId = NA,
+  InstanceStorage = 50,
+  n_instances = 2,
+  master_ip = NULL
+)
 }
 \arguments{
 \item{InstanceType}{'t2.medium'}

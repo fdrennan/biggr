@@ -4,8 +4,7 @@
 \alias{s3_upload_file}
 \title{upload_file}
 \usage{
-s3_upload_file(bucket, from, to, make_public = FALSE,
-  region = "us-east-2")
+s3_upload_file(bucket, from, to, make_public = FALSE, region = "us-east-2")
 }
 \arguments{
 \item{bucket}{Bucket to upload to}
