@@ -4,7 +4,7 @@
 \alias{ec2_instance_info}
 \title{ec2_instance_info}
 \usage{
-ec2_instance_info()
+ec2_instance_info(instance_ids = NULL, return_json = FALSE)
 }
 \description{
 ec2_instance_info

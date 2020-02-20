@@ -2,6 +2,8 @@
 
 # sudo wget https://s3.us-east-2.amazonaws.com/ndexr-files/startup.sh
 # ami-01c085148101c3bde
+cd /home/ubuntu
+
 sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
 sudo add-apt-repository 'deb https://cloud.r-project.org/bin/linux/ubuntu bionic-cran35/'
 
@@ -10,6 +12,7 @@ sudo add-apt-repository 'deb http://nginx.org/packages/ubuntu/ bionic nginx'
 
 sudo apt-get update
 
+sudo apt-get install htop
 
 # Install R Stuff
 sudo apt-get install r-base -y
@@ -34,13 +37,6 @@ sudo apt-get install nginx  -y
 wget https://download2.rstudio.org/server/trusty/amd64/rstudio-server-1.2.5033-amd64.deb
 yes | sudo gdebi rstudio-server-1.2.5033-amd64.deb
 
-# Install ROOT R PACKAGES
-sudo su - \
-  -c "R -e \"install.packages('shiny', repos='https://cran.rstudio.com/')\""
-sudo su - \
-  -c "R -e \"install.packages('rmarkdown', repos='https://cran.rstudio.com/')\""
-
-
 # Install SHINY SERVER
 wget https://download3.rstudio.org/ubuntu-14.04/x86_64/shiny-server-1.5.12.933-amd64.deb
 yes | sudo gdebi shiny-server-1.5.12.933-amd64.deb
@@ -55,10 +51,9 @@ sudo systemctl restart shiny-server
 # Setup NGINX
 mkdir /home/ubuntu/website
 sudo mv  /etc/nginx/nginx.conf /etc/nginx/nginx.conf.bak
-wget https://s3.us-east-2.amazonaws.com/ndexr-files/nginx.conf -P /etc/nginx/
+sudo wget https://s3.us-east-2.amazonaws.com/ndexr-files/nginx.conf -P /etc/nginx/
 sudo systemctl restart nginx
 sudo mv /usr/share/nginx/html/index.html /home/ubuntu/website/index.html
-
 
 # Install Docker
 sudo apt-get install -y \
@@ -98,6 +93,12 @@ sudo apt-get update && sudo apt-get install -y nvidia-container-toolkit
 sudo systemctl restart docker
 
 wget https://s3.us-east-2.amazonaws.com/ndexr-files/ndexr-gpu
+
+# Install ROOT R PACKAGES
+sudo su - \
+  -c "R -e \"install.packages('shiny', repos='https://cran.rstudio.com/')\""
+sudo su - \
+  -c "R -e \"install.packages('rmarkdown', repos='https://cran.rstudio.com/')\""
 
 
 

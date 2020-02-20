@@ -18,7 +18,9 @@ Depends:
     plumber,
     tictoc,
     ipify,
-    glue
+    glue,
+    jsonlite,
+    stringr
 LazyData: true
 RoxygenNote: 7.0.2
 Suggests: 

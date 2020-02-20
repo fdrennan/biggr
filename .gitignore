@@ -14,3 +14,4 @@ Shiny.pem
 inst/development_scripts/dev_spark.R
 .env
 .Renviron
+ndexr/postgres/.env
