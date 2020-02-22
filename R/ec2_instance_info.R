@@ -36,7 +36,7 @@ ec2_instance_info <- function(instance_ids = NULL, return_json = FALSE) {
   }
 
   if (return_json) {
-    results <- toJSON(results, pretty = TRUE)
+    results <- toJSON(results)
   }
 
   results
