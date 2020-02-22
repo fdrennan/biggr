@@ -20,7 +20,10 @@ Depends:
     ipify,
     glue,
     jsonlite,
-    stringr
+    stringr,
+    RPostgres,
+    dbplyr,
+    DBI
 LazyData: true
 RoxygenNote: 7.0.2
 Suggests: 

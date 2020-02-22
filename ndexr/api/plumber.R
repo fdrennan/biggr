@@ -1,37 +1,4 @@
 library(biggr)
-library(lubridate)
-library(stringr)
-library(jsonlite)
-library(RPostgres)
-library(DBI)
-library(dbplyr)
-
-postgres_connector <-
-  function() {
-    n <- 1
-    message('First attempt at connection')
-    repeat {
-      connection <-
-        try({
-          dbConnect(RPostgres::Postgres(),
-                    host = Sys.getenv('POSTGRES_HOST'),
-                    port = Sys.getenv('POSTGRES_PORT'),
-                    user = Sys.getenv('POSTGRES_USER'),
-                    password = Sys.getenv('POSTGRES_PASSWORD'),
-                    dbname = Sys.getenv('POSTGRES_DB'))
-        })
-
-      if (!inherits(connection, 'try-error')) {
-        break
-      } else {
-        n <- n + 1
-        message(glue('Trying to connect: try {n}'))
-      }
-    }
-
-    connection
-
-  }
 
 # install_python(envname = 'biggr')
 use_virtualenv('biggr')

@@ -1,0 +1,10 @@
+version: '2'
+services:
+  app1:
+    image: dockerfile
+    command: /app/plumber.R
+    volumes:
+     - .:/app
+    restart: always
+    ports:
+     - "8000:8000"
