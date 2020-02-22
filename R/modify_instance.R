@@ -13,6 +13,7 @@ modify_instance <- function(id = NULL, method = NULL, instance_type = NULL) {
     'start' = {
       tryCatch({
         ec2_instance_start(instance_id = id)
+        db_instance_status(id = id, status = method)
         return('Instance started')
       },
       error = function(err) {
@@ -22,6 +23,7 @@ modify_instance <- function(id = NULL, method = NULL, instance_type = NULL) {
     'stop' = {
       tryCatch({
         ec2_instance_stop(ids = id)
+        db_instance_status(id = id, status = method)
         return('Instance stopping')
       },
       error = function(err) {
@@ -32,6 +34,7 @@ modify_instance <- function(id = NULL, method = NULL, instance_type = NULL) {
     'reboot' = {
       tryCatch({
         ec2_instance_reboot(instance_id = id)
+        db_instance_status(id = id, status = method)
         return('Instance rebooting')
       },
       error  = function(err) {
@@ -42,6 +45,7 @@ modify_instance <- function(id = NULL, method = NULL, instance_type = NULL) {
     'terminate' = {
       tryCatch({
         ec2_instance_terminate(ids = id, force = TRUE)
+        db_instance_status(id = id, status = method)
         return('Terminate success')
       },
       error = function(err) {
@@ -55,6 +59,7 @@ modify_instance <- function(id = NULL, method = NULL, instance_type = NULL) {
       }
       tryCatch({
         ec2_instance_modify(instance_id = id, value = instance_type)
+        db_instance_status(id = id, status = method)
       },
       error = function(err) {
         stop(err)
