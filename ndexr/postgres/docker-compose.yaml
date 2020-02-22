@@ -19,3 +19,4 @@ services:
    network_mode: host
 volumes:
   ndexr_postgres_data:
+

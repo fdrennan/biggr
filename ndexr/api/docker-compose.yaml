@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 services:
   app1:
     image: ndexr-api
@@ -8,3 +8,24 @@ services:
     restart: always
     ports:
      - "8000:8000"
+    links:
+      - "db"
+  db:
+   image: "postgres"
+   container_name: "ndexr_postgres"
+   restart: always
+   ports:
+     - '5432:5432'
+   expose:
+      # Opens port 5432 on the container
+     - '5432'
+    # Where our data will be persisted
+   volumes:
+     - ndexr_postgres_data:/var/lib/postgresql/data
+   environment:
+     - POSTGRES_USER=${POSTGRES_USER}
+     - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+     - POSTGRES_DB:'postgres'
+volumes:
+  ndexr_postgres_data:
+
