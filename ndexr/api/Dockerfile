@@ -32,11 +32,12 @@ RUN R -e 'devtools::install_github("gregce/ipify")'
 
 RUN R -e 'library(reticulate); install_miniconda(force = TRUE);'
 
+WORKDIR /app
 
 RUN R -e 'devtools::install_github("fdrennan/biggr")'
 RUN R -e 'library(biggr); install_python(envname = "r-reticulate");'
 
-WORKDIR /app
+RUN R -e 'devtools::install_github("fdrennan/biggr")'
 
 EXPOSE 8000
 ENTRYPOINT ["R", "-e", "pr <- plumber::plumb(commandArgs()[4]); pr$run(host='0.0.0.0', port=8000)"]

@@ -19,6 +19,9 @@ postgres_connector <- function() {
       if (!inherits(connection, 'try-error')) {
         break
       } else {
+        if (n > 10) {
+          stop('Connection to DB failed')
+        }
         n <- n + 1
         message(glue('Trying to connect: try {n}'))
       }
