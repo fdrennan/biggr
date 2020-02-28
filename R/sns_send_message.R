@@ -20,3 +20,4 @@ sns_send_message <- function(phone_number = NA,
     return(TRUE)
   }
 }
+

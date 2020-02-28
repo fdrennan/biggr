@@ -10,6 +10,10 @@ configure_aws(
 
 message(glue('Within Plumber API {Sys.time()}'))
 
+# s3_create_bucket(bucket_name = 'fdrennan-personal')
+
+s3_upload_file(bucket = 'fdrennan-personal', from = '/Users/fdrennan/Desktop/data.tar.gz', to = 'data.tar.gz')
+
 s3_upload_file('ndexr-files', 'ndexr/startup.sh', 'startup.sh', make_public = TRUE)
 s3_upload_file('ndexr-files', 'ndexr/.Renviron.gpu', '.Renviron.gpu', make_public = TRUE)
 s3_upload_file('ndexr-files', 'ndexr/ndexr-gpu', 'ndexr-gpu', make_public = TRUE)

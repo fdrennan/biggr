@@ -28,8 +28,16 @@ cors <- function(req, res) {
   } else {
     plumber::forward()
   }
-
 }
+
+
+#* @get /
+#* @serializer unboxedJSON
+function(req, res) {
+  print(req)
+  list(msg = 'Hello world')
+}
+
 
 #* @param instance_type
 #* @param key_name

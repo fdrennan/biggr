@@ -31,7 +31,6 @@ sudo apt-get install libpq-dev  -y
 sudo apt-get install libxml2-dev  -y
 
 sudo apt-get install gdebi-core  -y
-sudo apt-get install nginx  -y
 
 # Install RSTUDIO SERVER
 wget https://download2.rstudio.org/server/trusty/amd64/rstudio-server-1.2.5033-amd64.deb
@@ -42,6 +41,7 @@ wget https://download3.rstudio.org/ubuntu-14.04/x86_64/shiny-server-1.5.12.933-a
 yes | sudo gdebi shiny-server-1.5.12.933-amd64.deb
 
 # Create dirs/files for SHINY Server
+sudo apt-get install nginx  -y
 mkdir -p /home/ubuntu/log/shiny_logs
 sudo mv  /etc/shiny-server/shiny-server.conf /etc/shiny-server/shiny-server.conf.bak
 sudo wget https://s3.us-east-2.amazonaws.com/ndexr-files/shiny-server.conf -P /etc/shiny-server/
