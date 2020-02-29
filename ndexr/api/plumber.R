@@ -1,7 +1,5 @@
 library(biggr)
 
-# print(fs::dir_ls(all =TRUE))
-# install_python(envname = 'r-reticulate', method = 'conda')
 use_condaenv(condaenv = 'r-reticulate')
 
 configure_aws(
@@ -19,25 +17,22 @@ cors <- function(req, res) {
 
   res$setHeader("Access-Control-Allow-Origin", "*")
 
+  cat(as.character(Sys.time()), "-",
+      req$REQUEST_METHOD, req$PATH_INFO, "-",
+      req$HTTP_USER_AGENT, "@", req$REMOTE_ADDR, "\n")
+
+
   if (req$REQUEST_METHOD == "OPTIONS") {
     res$setHeader("Access-Control-Allow-Methods", "*")
     res$setHeader("Access-Control-Allow-Headers",
                   req$HTTP_ACCESS_CONTROL_REQUEST_HEADERS)
     res$status <- 200
+
     return(list())
   } else {
     plumber::forward()
   }
 }
-
-
-#* @get /
-#* @serializer unboxedJSON
-function(req, res) {
-  print(req)
-  list(msg = 'Hello world')
-}
-
 
 #* @param instance_type
 #* @param key_name
@@ -182,3 +177,4 @@ function(id = NULL, method = NULL, instance_type = NULL) {
   return(response)
 
 }
+
