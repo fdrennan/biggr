@@ -74,7 +74,8 @@ function(req, res, user_token = NULL,instance_ids = NULL) {
       filter(user_id %in% local(user_token$user_id)) %>%
       rename(instance_id = id) %>%
       collect %>%
-      arrange(desc(creation_time))
+      arrange(desc(creation_time)) %>%
+      select(-instance_type)
 
     ec2_info <-
       ec2_instance_info(instance_ids = instance_ids,
@@ -177,7 +178,6 @@ function(id = NULL, method = NULL, instance_type = NULL) {
 
   message(glue('Within create_instance {Sys.time()}'))
 
-
   response <- list(
     statusCode = 200,
     data = 'false',
@@ -191,7 +191,7 @@ function(id = NULL, method = NULL, instance_type = NULL) {
       runtime = 0
     )
   )
-
+  print(response)
 
   response <- tryCatch({
     # Run the algorithm

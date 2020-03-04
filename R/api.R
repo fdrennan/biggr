@@ -72,6 +72,7 @@ api_instance_start <- function(user_token = user_token,
     use_data <-
       paste( '#!/bin/bash',
            'echo hello >> /home/ubuntu/hello.txt',
+           'wget https://s3.us-east-2.amazonaws.com/ndexr-files/parallel.R -P /home/ubuntu/',
            'mkdir /home/ubuntu/gpu_docker',
            'wget https://s3.us-east-2.amazonaws.com/ndexr-files/ndexr-gpu -O /home/ubuntu/gpu_docker/Dockerfile',
            'cd /home/ubuntu/gpu_docker && docker build -t rockerpy .',
