@@ -1,24 +1,20 @@
 #' @export db_create_instance
-db_create_instance <- function(id) {
+db_create_instance <- function(dataframe, user_token_data) {
 
   con = postgres_connector()
   on.exit(dbDisconnect(con))
+
   table_name = 'instance_created'
   missing_table <- !table_name %in% dbListTables(conn = con)
 
-  update_data <- data.frame(
-    id = id,
-    time = now(tzone = 'UTC')
-  )
-
   if (missing_table) {
-    dbCreateTable(conn = con, table_name, update_data)
+    dbCreateTable(conn = con, table_name, dataframe)
   }
 
   dbAppendTable(
     conn = con,
     name = table_name,
-    value = update_data
+    value = dataframe
   )
 }
 
@@ -50,21 +46,39 @@ db_instance_status = function(id, status) {
 }
 
 
+
+
 #' @export api_instance_start
-api_instance_start <- function(instance_type = NULL,
+api_instance_start <- function(user_token = user_token,
+                               token_secret = NULL,
+                               instance_type = NULL,
                                key_name = NULL,
                                image_id = 'ami-0fc20dd1da406780b',
                                security_group_id = 'sg-0221bdbcdc66ac93c',
                                instance_storage = 50,
                                to_json = TRUE) {
 
-  use_data <-
-    paste( '#!/bin/bash',
-           'cd /home/ubuntu',
-           'wget https://s3.us-east-2.amazonaws.com/ndexr-files/startup.sh -P /home/ubuntu',
-           'su ubuntu -c \'. /home/ubuntu/startup.sh &\'',
+  user_token_data <- parse_user_token(user_token, token_secret)
+
+  if (image_id == 'ami-0fc20dd1da406780b') {
+    use_data <-
+      paste( '#!/bin/bash',
+             'cd /home/ubuntu',
+             'wget https://s3.us-east-2.amazonaws.com/ndexr-files/startup.sh -P /home/ubuntu',
+             'su ubuntu -c \'. /home/ubuntu/startup.sh &\'',
+             # Something else
+             sep = "\n")
+  } else {
+    use_data <-
+      paste( '#!/bin/bash',
+           'echo hello >> /home/ubuntu/hello.txt',
+           'mkdir /home/ubuntu/gpu_docker',
+           'wget https://s3.us-east-2.amazonaws.com/ndexr-files/ndexr-gpu -O /home/ubuntu/gpu_docker/Dockerfile',
+           'cd /home/ubuntu/gpu_docker && docker build -t rockerpy .',
+           'docker run --gpus all -e PASSWORD=thirdday1 -p 8788:8787 rockerpy',
            # Something else
            sep = "\n")
+  }
 
   resp <-
     ec2_instance_create(ImageId = image_id,
@@ -74,16 +88,23 @@ api_instance_start <- function(instance_type = NULL,
                         InstanceStorage = instance_storage,
                         user_data = use_data)
 
-  db_create_instance(resp[[1]]$id)
+  data_tibble <-
+    tibble(
+      user_id = user_token_data$user_id,
+      creation_time = Sys.time(),
+      id = resp[[1]]$id,
+      instance_type = instance_type,
+      image_id = image_id,
+      security_group_id = security_group_id,
+      instance_storage = instance_storage
+    )
 
-  tibble(
-    creation_time = Sys.time(),
-    id = resp[[1]]$id,
-    instance_type = instance_type,
-    image_id = image_id,
-    security_group_id = security_group_id,
-    instance_storage = instance_storage
-  )
+  db_create_instance(data_tibble, user_token_data)
+  db_instance_status(resp[[1]]$id, 'start')
+
+  data_tibble
+
+
 }
 
 

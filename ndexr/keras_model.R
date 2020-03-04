@@ -1,11 +1,6 @@
 library(keras)
 library(reticulate)
 
-# virtualenv_create('r_tensorflow')
-# RETICULATE_PYTHON_ENV=~/.virtualenvs/r_tensorflow
-install_keras(tensorflow = 'gpu')
-
-
 batch_size <- 128
 num_classes <- 10
 epochs <- 12
@@ -55,7 +50,7 @@ model <- keras_model_sequential() %>%
   layer_dense(units = num_classes, activation = 'softmax')
 
 # Remove the comment below to enable GPU support.
-model <- multi_gpu_model(model, gpus = 1)
+# model <- multi_gpu_model(model, gpus = 1)
 
 # Compile model
 model %>% compile(

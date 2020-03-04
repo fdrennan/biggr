@@ -92,7 +92,7 @@ curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.li
 sudo apt-get update && sudo apt-get install -y nvidia-container-toolkit
 sudo systemctl restart docker
 
-wget https://s3.us-east-2.amazonaws.com/ndexr-files/ndexr-gpu
+wget https://s3.us-east-2.amazonaws.com/ndexr-files/ndexr-gpu -O Dockerfile
 
 # Install ROOT R PACKAGES
 sudo su - \
@@ -101,9 +101,8 @@ sudo su - \
   -c "R -e \"install.packages('rmarkdown', repos='https://cran.rstudio.com/')\""
 
 
-
 # docker build -t rockerpy .
-# docker run --gpus all  -p 8788:8787 rockerpy
+# docker run --gpus all -e PASSWORD=thirdday1 -p 8788:8787 rockerpy
 
 # # INSTALL CUDNN
 # wget https://s3.us-east-2.amazonaws.com/ndexr-files/cudnn-10.0-linux-x64-v7.6.5.32.tgz
