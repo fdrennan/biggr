@@ -61,6 +61,8 @@ function(req, res, user_token = NULL,instance_ids = NULL) {
     )
   )
 
+  print(response)
+
   response <- tryCatch({
     # Run the algorithm
 
