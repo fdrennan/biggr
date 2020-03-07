@@ -32,6 +32,17 @@ sudo apt-get install libxml2-dev  -y
 
 sudo apt-get install gdebi-core  -y
 
+sudo apt-get install nodejs -y
+sudo apt-get install npm -y
+
+echo 'ssh-keygen -t rsa -b 4096' >> run_to_create_keygen
+echo 'cat .ssh/id_rsa.pub' >> run_to_create_keygen
+
+curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+sudo apt update
+sudo apt install yarn
+
 # Install RSTUDIO SERVER
 wget https://download2.rstudio.org/server/trusty/amd64/rstudio-server-1.2.5033-amd64.deb
 yes | sudo gdebi rstudio-server-1.2.5033-amd64.deb

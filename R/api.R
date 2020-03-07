@@ -55,6 +55,7 @@ api_instance_start <- function(user_token = user_token,
                                key_name = NULL,
                                image_id = 'ami-0fc20dd1da406780b',
                                security_group_id = 'sg-0221bdbcdc66ac93c',
+                               security_group_name = NA,
                                instance_storage = 50,
                                to_json = TRUE) {
 
@@ -79,6 +80,13 @@ api_instance_start <- function(user_token = user_token,
            'docker run --gpus all -e PASSWORD=thirdday1 -p 8788:8787 rockerpy',
            # Something else
            sep = "\n")
+  }
+
+  if(!is.na(security_group_name)) {
+    security_group_id = filter(security_group_list(), group_name == security_group_name)$group_id
+    if(length(security_group_id) == 0) {
+      stop('Incorrect security group name given.')
+    }
   }
 
   resp <-

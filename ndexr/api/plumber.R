@@ -115,6 +115,7 @@ function(req, res,
          image_id = 'ami-0fc20dd1da406780b',
          security_group_id = 'sg-0221bdbcdc66ac93c',
          instance_storage = 50,
+         security_group_name = 'testr',
          to_json = TRUE) {
 
   message(glue('Within create_instance {Sys.time()}'))
@@ -128,8 +129,10 @@ function(req, res,
       args = list(
         instance_type = instance_type,
         key_name = key_name,
+        image_id = image_id,
+        security_group_id = security_group_id,
         instance_storage = instance_storage,
-        image_id = image_id
+        security_group_name = security_group_name
       ),
       runtime = 0
     )
@@ -153,6 +156,7 @@ function(req, res,
       instance_type = instance_type,
       key_name = key_name,
       instance_storage = instance_storage,
+      security_group_name = security_group_name,
       image_id = image_id
     )
     timer <- toc(quiet = T)

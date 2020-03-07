@@ -4,10 +4,12 @@
 \alias{security_group_create}
 \title{security_group_create}
 \usage{
-security_group_create(group_name = NA)
+security_group_create(group_name = NA, description = "Add a description")
 }
 \arguments{
 \item{group_name}{Name of security group}
+
+\item{description}{}
 }
 \description{
 security_group_create
