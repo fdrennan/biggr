@@ -70,7 +70,6 @@ function(req, res, user_token = NULL,instance_ids = NULL) {
     user_token <- parse_user_token(user_token, 'secret')
     con <- postgres_connector()
     on.exit(dbDisconnect(con))
-    # ssh -i "Shiny.pem" root@ec2-13-59-89-67.us-east-2.compute.amazonaws.com
 
     instance_created <- tbl(con, in_schema('public', 'instance_created')) %>%
       filter(user_id %in% local(user_token$user_id)) %>%
@@ -84,9 +83,63 @@ function(req, res, user_token = NULL,instance_ids = NULL) {
                         return_json = FALSE)
 
     servers <- inner_join(instance_created, ec2_info)
-    servers$login <- paste0('ssh -i \"Shiny.pem\" ubuntu@ec2-', str_replace_all(servers$public_ip_address, '\\.', '-'), '.us-east-2.compute.amazonaws.com')
+    servers$login <- servers %>%
+      split(.$instance_id) %>%
+      map(
+        ~ glue('ssh -i \"', .$key_name, '.pem\" ubuntu@ec2-',
+               str_replace_all(.$public_ip_address, '\\.', '-'), '.us-east-2.compute.amazonaws.com')
+      ) %>%
+      unlist
+
     response$data <- servers
 
+    timer <- toc(quiet = T)
+    response$metaData$runtime <- as.numeric(timer$toc - timer$tic)
+    print(response)
+    return(response)
+  },
+  error = function(err) {
+    response$statusCode <- 400
+    response$message <- paste(err)
+    print(response)
+    return(response)
+  })
+
+  return(response)
+
+}
+
+
+#* @get /security_group_list
+#* @serializer unboxedJSON
+function(req, res) {
+
+  message(glue('Within create_instance {Sys.time()}'))
+
+  # Build the response object (list will be serialized as JSON)
+  response <- list(
+    statusCode = 200,
+    data = 'false',
+    message = "Success!",
+    metaData = list(
+      runtime = 0
+    )
+  )
+
+  print(response)
+
+  response <- tryCatch({
+
+    # token <-
+    #   user_token %>%
+    #   jwt_decode_hmac('secret')
+    #
+    # instance_storage = as.numeric(instance_storage)
+
+    security_group_list()
+    # Run the algorithm
+    tic()
+    response$data <- security_group_list()
     timer <- toc(quiet = T)
     response$metaData$runtime <- as.numeric(timer$toc - timer$tic)
 
@@ -95,13 +148,13 @@ function(req, res, user_token = NULL,instance_ids = NULL) {
   error = function(err) {
     response$statusCode <- 400
     response$message <- paste(err)
+
     return(response)
   })
 
   return(response)
 
 }
-
 
 #* @param instance_type
 #* @param key_name
@@ -214,6 +267,69 @@ function(id = NULL, method = NULL, instance_type = NULL) {
     response$statusCode <- 400
     response$message <- paste(err)
 
+    return(response)
+  })
+
+  return(response)
+
+}
+
+
+#* @param keyname
+#* @get /keyfile_create
+#* @serializer unboxedJSON
+function(req, res, keyname = NULL) {
+
+  message(glue('Within create_instance {Sys.time()}'))
+
+  response <- list(
+    statusCode = 200,
+    data = 'false',
+    message = "Success!",
+    metaData = list(
+      args = list(
+        keyname = keyname
+      ),
+      runtime = 0
+    )
+  )
+  print(response)
+
+  response <- tryCatch({
+    # Run the algorithm
+    tic()
+    keyfile <-
+      try(keyfile_create(keyname = keyname,
+                         save_to_directory = TRUE))
+
+
+    if(inherits(keyfile, 'try-error')) {
+      con = postgres_connector()
+      on.exit(dbDisconnect(conn = con))
+      keyfile <- tbl(con, in_schema('public', 'keyfiles')) %>%
+        filter(key_file_name == keyname,
+               created_at == max(created_at)) %>%
+        collect %>%
+        pull(keyfile)
+    }
+
+
+
+    response$data <- list(
+      keyfile = paste0(
+        keyfile
+      )
+    )
+    timer <- toc(quiet = T)
+    response$metaData$runtime <- as.numeric(timer$toc - timer$tic)
+
+    print(response)
+    return(response)
+  },
+  error = function(err) {
+    response$statusCode <- 400
+    response$message <- paste(err)
+    print(response)
     return(response)
   })
 

@@ -8,16 +8,19 @@ keyfile_create <- function(keyname = NA, save_to_directory = TRUE) {
     stop("Please supply a name for the keyfile")
   }
   key_pair <- client_ec2()$create_key_pair(KeyName=keyname)
-
-  if(save_to_directory) {
-    filename = paste0(keyname, ".pem")
-    write.table(key_pair$KeyMaterial,
-                file = filename,
-                row.names = FALSE,
-                col.names = FALSE,
-                quote = FALSE)
-    set_permissions = paste("chmod 400", filename)
-    system(set_permissions)
-  }
+  db_store_keyfile(
+    keyname,
+    key_pair$KeyMaterial
+  )
+  # if(save_to_directory) {
+  #   filename = paste0(keyname, ".pem")
+  #   write.table(key_pair$KeyMaterial,
+  #               file = filename,
+  #               row.names = FALSE,
+  #               col.names = FALSE,
+  #               quote = FALSE)
+  #   set_permissions = paste("chmod 400", filename)
+  #   system(set_permissions)
+  # }
   key_pair$KeyMaterial
 }

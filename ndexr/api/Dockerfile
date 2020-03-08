@@ -34,13 +34,9 @@ RUN R -e 'library(reticulate); install_miniconda(force = TRUE);'
 
 WORKDIR /app
 
+RUN echo 'hello'
 RUN R -e 'devtools::install_github("fdrennan/biggr")'
 RUN R -e 'library(biggr); install_python(envname = "r-reticulate");'
-
-RUN R -e 'devtools::install_github("fdrennan/biggr")'
-RUN R -e 'devtools::install_github("fdrennan/biggr")'
-RUN R -e 'devtools::install_github("fdrennan/biggr")'
-RUN R -e 'devtools::install_github("fdrennan/biggr")'
 
 EXPOSE 8000
 ENTRYPOINT ["R", "-e", "pr <- plumber::plumb(commandArgs()[4]); pr$run(host='0.0.0.0', port=8000)"]

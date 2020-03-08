@@ -1,3 +1,28 @@
+#' @export db_store_keyfile
+db_store_keyfile <- function(key_file_name, keyfile) {
+  keyfile_tibble = tibble(
+    created_at = Sys.time(),
+    key_file_name = key_file_name,
+    keyfile = keyfile
+  )
+  con = postgres_connector()
+  on.exit(dbDisconnect(con))
+
+  table_name = 'keyfiles'
+  missing_table <- !table_name %in% dbListTables(conn = con)
+
+  if (missing_table) {
+    dbCreateTable(conn = con, table_name, keyfile_tibble)
+  }
+
+  dbAppendTable(
+    conn = con,
+    name = table_name,
+    value = keyfile_tibble
+  )
+}
+
+
 #' @export db_create_instance
 db_create_instance <- function(dataframe, user_token_data) {
 
@@ -102,6 +127,7 @@ api_instance_start <- function(user_token = user_token,
       user_id = user_token_data$user_id,
       creation_time = Sys.time(),
       id = resp[[1]]$id,
+      key_name = key_name,
       instance_type = instance_type,
       image_id = image_id,
       security_group_id = security_group_id,
@@ -186,4 +212,5 @@ modify_instance <- function(id = NULL, method = NULL, instance_type = NULL) {
     }
   )
 }
+
 
