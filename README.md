@@ -1,5 +1,8 @@
 # INSTALLATION
 
+aws ec2 create-default-vpc
+
+
 Technical documentation is not complete but is located [here](https://fdrennan.github.io/biggr_book/).
 
 ![](https://travis-ci.org/fdrennan/awsR.svg?branch=master)

@@ -150,7 +150,7 @@ function(req, res,
 
     # Run the algorithm
     tic()
-    response$data <- api_instance_start(
+    response$data <-api_instance_start (
       user_token = user_token,
       token_secret = 'secret',
       instance_type = instance_type,
