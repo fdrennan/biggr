@@ -1,8 +1,0 @@
-FROM rocker/ml:cuda-10.0
-RUN apt-get -y install sudo
-RUN useradd -m docker && echo "docker:docker" | chpasswd && adduser docker sudo
-RUN wget https://s3.us-east-2.amazonaws.com/ndexr-files/.Renviron.gpu -P /home/docker/
-RUN wget https://s3.us-east-2.amazonaws.com/ndexr-files/install_keras.R -P /home/docker/
-RUN wget https://s3.us-east-2.amazonaws.com/ndexr-files/keras_model.R -P /home/docker/
-RUN mv /home/docker/.Renviron.gpu /home/docker/.Renviron
-RUN runuser -l docker -c '/usr/bin/Rscript /home/docker/install_keras.R'
