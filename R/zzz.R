@@ -7,6 +7,9 @@ boto <- NULL
 subprocess <- NULL
 #' sys module
 sys <- NULL
+#' paramiko module
+paramiko <- NULL
+
 #' @import reticulate
 .onLoad <- function(libname, pkgname) {
   # use superassignment to update global reference to scipy
@@ -14,4 +17,5 @@ sys <- NULL
   subprocess <<- reticulate::import("subprocess", delay_load = TRUE)
   boto <<- reticulate::import("boto3", delay_load = TRUE)
   sys <<- reticulate::import("sys", delay_load = TRUE)
+  paramiko <<- reticulate::import("paramiko", delay_load = TRUE)
 }

@@ -23,23 +23,29 @@ ec2_instance_create <- function(ImageId = NA,
     user_data <- ec2_instance_script(null_user = TRUE)
   }
 
-  resource = resource_ec2()
-  resource$create_instances(ImageId      = ImageId,
-                            InstanceType = InstanceType,
-                            MinCount     = as.integer(min),
-                            MaxCount     = as.integer(max),
-                            UserData     = user_data,
-                            KeyName      = KeyName,
-                            SecurityGroupIds = list(SecurityGroupId),
-                            BlockDeviceMappings = list(
-                              list(
-                                Ebs = list(
-                                  VolumeSize = as.integer(InstanceStorage)
-                                ),
-                                DeviceName = DeviceName
-                              )
-                            )
+  response <-
+    resource_ec2()$create_instances(ImageId      = ImageId,
+                                    InstanceType = InstanceType,
+                                    MinCount     = as.integer(min),
+                                    MaxCount     = as.integer(max),
+                                    UserData     = user_data,
+                                    KeyName      = KeyName,
+                                    SecurityGroupIds = list(SecurityGroupId),
+                                    BlockDeviceMappings = list(
+                                      list(
+                                        Ebs = list(
+                                          VolumeSize = as.integer(InstanceStorage)
+                                        ),
+                                        DeviceName = DeviceName
+                                      )
+                                    )
   )
 
+  walk(response, function(x) x$wait_until_running())
+  walk(response, function(x) x$load())
+
+  response
+
 }
+
 

@@ -7,5 +7,6 @@ install_python <- function (method = "auto", conda = "auto", envname = 'r_reticu
   reticulate::py_install("scipy", method = method, conda = conda, envname = envname)
   reticulate::py_install("awscli", method = method, conda = conda, envname = envname)
   reticulate::py_install("boto3", method = method, conda = conda, envname = envname)
+  reticulate::py_install("paramiko", method = method, conda = conda, envname = envname)
 }
 

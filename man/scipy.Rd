@@ -4,7 +4,9 @@
 \name{scipy}
 \alias{scipy}
 \title{scipy module}
-\format{An object of class \code{python.builtin.module} (inherits from \code{python.builtin.object}) of length 2.}
+\format{
+An object of class \code{python.builtin.module} (inherits from \code{python.builtin.object}) of length 2.
+}
 \usage{
 scipy
 }

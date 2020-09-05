@@ -4,7 +4,9 @@
 \name{boto}
 \alias{boto}
 \title{boto module}
-\format{An object of class \code{python.builtin.module} (inherits from \code{python.builtin.object}) of length 2.}
+\format{
+An object of class \code{python.builtin.module} (inherits from \code{python.builtin.object}) of length 2.
+}
 \usage{
 boto
 }
