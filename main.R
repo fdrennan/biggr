@@ -1,8 +1,24 @@
 library(biggr)
 
+paramiko <- import('paramiko')
+
 run_command <- function(con, command) {
   as.character(con$exec_command(command)[[2]]$read())
 }
+
+send_file <- function(con, local_path, remote_path) {
+  ftp_client = con$open_sftp()
+  ftp_client$put(local_path, remote_path)
+  ftp_client$close()
+}
+
+
+get_file <- function(self, remote_path, local_path) {
+  ftp_client = con$open_sftp()
+  ftp_client$get(remote_path, local_path)
+  ftp_client$close()
+}
+
 
 tryCatch(expr = {
   keyfile_create(keyname = 'fdren')
@@ -17,14 +33,26 @@ security_group_create(security_group_name = security_group_name,
 
 security_group_id <-
   security_group_envoke(sg_name = security_group_name,
-                        ports = c(22, 80, 8000:8001),
-                        '75.166.84.192')
+                        ports = c(22, 80, 8000:8020, 8787, 5432, 5439, 3000, 8080),
+                        get_ip())
+
+if (TRUE) {
+  security_group_delete(security_group_id = security_group_id)
+
+  security_group_create(security_group_name = security_group_name,
+                        description = 'Ports for Production')
+
+  security_group_id <-
+    security_group_envoke(sg_name = security_group_name,
+                          ports = c(22, 80, 8000:8020, 8787, 5432, 5439, 3000, 8080),
+                          get_ip())
+}
 
 response <-
   ec2_instance_create(ImageId = 'ami-0010d386b82bc06f0',
-                      InstanceType='t2.xlarge',
-                      min = 1,
-                      max = 1,
+                      InstanceType='t2.2xlarge',
+                      min = 3,
+                      max = 3,
                       KeyName = 'fdren',
                       SecurityGroupId = security_group_id,
                       InstanceStorage = 50,
@@ -33,7 +61,8 @@ response <-
 
 
 ip_addresses <- map_chr(response, function(x) x$public_ip_address)
-walk(response, function(x) x$terminate())
+
+# walk(response, function(x) x$terminate())
 # ec2_instance_info()
 
 nginx_conf <- glue('
@@ -80,12 +109,47 @@ http {
 }
 ', .open = '--', .close = '--')
 
-paramiko <- import('paramiko')
+# walk(response[2:3], function(x) x$terminate())
 
+sleep_time <- 40
+message(glue('Sleeping for {sleep_time} seconds'))
+Sys.sleep(sleep_time)
 ssh = paramiko$SSHClient()
 ssh$set_missing_host_key_policy(paramiko$AutoAddPolicy())
-ssh$connect(response[[1]]$public_dns_name,
-            username='ubuntu',
-            key_filename='fdren.pem')
 
+map2(
+  response,
+  c('DEV', 'BETA', 'PROD'),
+  function(server, server_name) {
 
+    public_dns_name <- server$public_dns_name
+    message(glue('Generating {public_dns_name}'))
+    ssh$connect(server$public_dns_name,
+                username='ubuntu',
+                key_filename='fdren.pem')
+    time = 1
+    cumulative_wait = sleep_time
+    while (str_detect(run_command(ssh, 'ls -lah') , 'user_data_running')) {
+      Sys.sleep(time)
+      cumulative_wait = cumulative_wait + time
+      message(glue('You have been waiting for {cumulative_wait} seconds'))
+    }
+
+    # Refresh connection for docker usergroup modification
+    ssh$connect(server$public_dns_name,
+                username='ubuntu',
+                key_filename='fdren.pem')
+    # send_file(con = ssh, local_path = 'nginx/nginx.conf', remote_path = '/home/ubuntu/nginx.conf')
+    # send_file(con = ssh, local_path = 'nginx/docker-compose.yaml', remote_path = '/home/ubuntu/docker-compose.yaml')
+    cat(run_command(con = ssh, command = 'ls -lah'))
+    run_command(ssh, 'git clone https://github.com/fdrennan/productor.git')
+    # send_file(con = ssh, local_path = '.Renviron', remote_path = '/home/ubuntu/productor/.Renviron')
+    # send_file(con = ssh, local_path = '.env', remote_path = '/home/ubuntu/productor/.env')
+    send_file(con = ssh, local_path = 'docker.sh', remote_path = '/home/ubuntu/docker.sh')
+    run_command(ssh, glue('echo SERVER={server_name} >> /home/ubuntu/productor/.Renviron'))
+    cat(run_command(con = ssh, command = '. docker.sh'))
+  }
+)
+
+#
+#

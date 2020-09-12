@@ -4,16 +4,25 @@ exec &> /home/ubuntu/logfile.txt
 
 # Install Required Binaries
 touch /home/ubuntu/user_data_running
-
+echo 'deb https://cloud.r-project.org/bin/linux/ubuntu bionic-cran40/' >> /etc/apt/sources.list
+sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
 apt-get update -y
+
 apt-get install -y \
     apt-transport-https \
     ca-certificates \
     curl \
     gnupg-agent \
-    software-properties-common
+    software-properties-common \
+    r-base \
+    libcurl4-openssl-dev \
+    libssl-dev \
+    libssh2-1-dev \
+    gdebi-core \
+    libxml2-dev \
+    littler
 
-# Install Docker
+# # Install Docker
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 apt-key fingerprint 0EBFCD88
 add-apt-repository \
@@ -24,15 +33,15 @@ apt-get update -y
 apt-get install -y docker-ce docker-ce-cli containerd.io
 usermod -aG docker ubuntu
 
-# Install Docker Compose
+# # Install Docker Compose
 curl -L "https://github.com/docker/compose/releases/download/1.26.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
 
-# INSTALL NVIDIA DRIVERS
+# # INSTALL NVIDIA DRIVERS
 apt-get install --no-install-recommends nvidia-driver-418 -y
 
-# Install NVIDIA Docker
-# https://github.com/NVIDIA/nvidia-docker/issues/1073
+# # Install NVIDIA Docker
+# # https://github.com/NVIDIA/nvidia-docker/issues/1073
 distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
 curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | apt-key add -
 curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | tee /etc/apt/sources.list.d/nvidia-docker.list

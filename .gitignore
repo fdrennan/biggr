@@ -17,3 +17,5 @@ inst/development_scripts/dev_spark.R
 ndexr/postgres/.env
 ndexr/api/.Renviron
 *.pem
+.Renviron
+.env

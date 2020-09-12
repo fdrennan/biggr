@@ -1,0 +1,72 @@
+linters: with_defaults(
+    single_quotes_linter = NULL, # 147
+    assignment_linter = NULL, # 55
+    line_length_linter = NULL, # 51
+    spaces_left_parentheses_linter = NULL, # 43
+    trailing_blank_lines_linter = NULL, # 40
+    commented_code_linter = NULL, # 39
+    object_name_linter = NULL, # 36
+    infix_spaces_linter = NULL, # 19
+    commas_linter = NULL, # 8
+    object_usage_linter = NULL, # 8
+    spaces_inside_linter = NULL, # 3
+    open_curly_linter = NULL, # 2
+    function_left_parentheses_linter = NULL, # 1
+    seq_linter = NULL, # 1
+    dummy_linter = NULL
+  )
+exclusions: list(
+    "man/awsR.Rd",
+    "man/boto.Rd",
+    "man/boto3.Rd",
+    "man/client_cost.Rd",
+    "man/client_ec2.Rd",
+    "man/client_rds.Rd",
+    "man/client_s3.Rd",
+    "man/client_sns.Rd",
+    "man/configure_aws.Rd",
+    "man/cost_get.Rd",
+    "man/ec2_image_create.Rd",
+    "man/ec2_images_list.Rd",
+    "man/ec2_instance_create.Rd",
+    "man/ec2_instance_info.Rd",
+    "man/ec2_instance_modify.Rd",
+    "man/ec2_instance_prebuilt.Rd",
+    "man/ec2_instance_reboot.Rd",
+    "man/ec2_instance_script.Rd",
+    "man/ec2_instance_start.Rd",
+    "man/ec2_instance_stop.Rd",
+    "man/ec2_instance_terminate.Rd",
+    "man/if_is_null.Rd",
+    "man/install_python.Rd",
+    "man/keyfile_create.Rd",
+    "man/keyfile_delete.Rd",
+    "man/keyfile_list.Rd",
+    "man/paramiko.Rd",
+    "man/postgres_connector.Rd",
+    "man/r_box.Rd",
+    "man/rand_name.Rd",
+    "man/rds_instance_create.Rd",
+    "man/resource_ec2.Rd",
+    "man/resource_s3.Rd",
+    "man/s3_create_bucket.Rd",
+    "man/s3_delete_bucket.Rd",
+    "man/s3_delete_file.Rd",
+    "man/s3_download_file.Rd",
+    "man/s3_list_buckets.Rd",
+    "man/s3_list_objects.Rd",
+    "man/s3_put_object_acl.Rd",
+    "man/s3_upload_file.Rd",
+    "man/scipy.Rd",
+    "man/security_group_create.Rd",
+    "man/security_group_data.Rd",
+    "man/security_group_delete.Rd",
+    "man/security_group_envoke.Rd",
+    "man/security_group_list.Rd",
+    "man/security_group_revoke.Rd",
+    "man/sns_send_message.Rd",
+    "man/spark_master.Rd",
+    "man/spark_slave.Rd",
+    "man/subprocess.Rd",
+    "man/sys.Rd"
+  )
