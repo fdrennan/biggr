@@ -170,7 +170,7 @@ server_info <- function(CLEAN_UP = TRUE) {
       servers$instance_id
     )
   )
-  servers_list <- resource$instances$filter(InstanceIds = servers$instance_id)
+  servers_list <- resource$instances$all()
   servers <- map_df(
     iterate(servers_list$all()),
     function(x) {

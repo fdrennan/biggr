@@ -1,7 +1,14 @@
 library(biggr)
 library(dbx)
-
+# a <- server_info()
 paramiko <- import('paramiko')
+
+
+get_server_stage <- function() {
+  con <- suppressMessages(postgres_connector())
+  on.exit(dbDisconnect(con))
+  tbl(con, in_schema('public', 'server_stage')) %>% collect
+}
 
 tryCatch(expr = {
   keyfile_create(keyname = 'fdren')
@@ -21,32 +28,26 @@ security_group_id <-
 
 server_names <- c('DEV', 'BETA', 'PROD')
 
-
 response <-
   ec2_instance_create(ImageId = 'ami-0010d386b82bc06f0',
-                      InstanceType='t2.2xlarge',
+                      InstanceType='t2.large',
                       min = length(server_names),
                       max = length(server_names),
                       KeyName = 'fdren',
                       SecurityGroupId = security_group_id,
-                      InstanceStorage = 50,
+                      InstanceStorage = 30,
                       DeviceName = "/dev/sda1",
                       user_data  = readr::read_file('instance.sh'))
 
 specify_server_priority(instance_ids = map_chr(response, ~ .$instance_id),
                         values = server_names)
 
-servers <- server_info()
-# dbxDelete(conn = con, table = 'server_stage', where = data.frame(stage = 'STAGE'))
-
-
-
 sleep_time <- 60
 message(glue('Sleeping for {sleep_time} seconds'))
 Sys.sleep(sleep_time)
 
 # Refresh Database
-server_info()
+servers <- server_info()
 
 map2(
   response,
@@ -69,7 +70,11 @@ map2(
     stage_run_command(command = glue('cd /home/ubuntu/productor && git checkout -b {lower_server} && git pull origin {lower_server}'),
                       stage_name = server_name)
 
-    stage_transfer_file(local_path = 'docker.sh', remote_path = '/home/ubuntu/docker.sh', stage_name = server_name)
+    if (lower_server == 'prod') {
+      stage_transfer_file(local_path = glue('docker.sh'), remote_path = '/home/ubuntu/docker.sh', stage_name = server_name)
+    } else {
+      stage_transfer_file(local_path = glue('docker-{server_name}.sh'), remote_path = '/home/ubuntu/docker.sh', stage_name = server_name)
+    }
     stage_run_command(glue('echo SERVER={server_name} >> /home/ubuntu/productor/.Renviron'),
                       stage_name = server_name)
     stage_run_command('. docker.sh',
@@ -80,6 +85,8 @@ map2(
 map(
   server_names,
   function(server_name) {
+    message(glue('Monitoring over {server_name}'))
+    lower_server <- str_to_lower(server_name)
     time = 1
     cumulative_wait = 0
     while (!str_detect(stage_run_command('ls -lah', stage_name = server_name) , 'docker_data_complete')) {
@@ -89,10 +96,31 @@ map(
         cat(stage_run_command(command = 'tail -n 30 docker.txt'))
       )
     }
+    if (lower_server == 'prod') {
+      stage_run_command('cd /home/ubuntu/productor && /usr/local/bin/docker-compose -f docker-compose.yaml pull', stage_name = server_name)
+      stage_run_command(glue('cd /home/ubuntu/productor && /usr/local/bin/docker-compose -f docker-compose.yaml up -d --build productor_postgres'), stage_name = server_name)
+      stage_run_command('cd /home/ubuntu/productor && /usr/local/bin/docker-compose -f docker-compose.yaml up -d --build productor_initdb', stage_name = server_name)
+      stage_run_command('cd /home/ubuntu/productor && /usr/local/bin/docker-compose -f docker-compose.yaml up -d --remove-orphans', stage_name = server_name)
+    } else {
+      stage_run_command(glue('cd /home/ubuntu/productor && /usr/local/bin/docker-compose -f docker-compose-{lower_server}.yaml pull'), stage_name = server_name)
+      stage_run_command(glue('cd /home/ubuntu/productor && /usr/local/bin/docker-compose -f docker-compose-{lower_server}.yaml up -d --build productor_postgres'), stage_name = server_name)
+      stage_run_command(glue('cd /home/ubuntu/productor && /usr/local/bin/docker-compose -f docker-compose-{lower_server}.yaml up -d --build productor_initdb'), stage_name = server_name)
+      stage_run_command(glue('cd /home/ubuntu/productor && /usr/local/bin/docker-compose -f docker-compose-{lower_server}.yaml up -d --remove-orphans'), stage_name = server_name)
+    }
   }
 )
 
 
 sns_send_message(phone_number = Sys.getenv('PHONE'), message = 'All Done')
+# library(biggr)
+# library(dbx)
+# server_info()$instances$terminate()
 
-server_info()$instances$stop()
+
+
+# stage_run_command('/home/ubuntu/productor && sudo /usr/bin/Rscript update_env.R', stage_name = 'BETA')
+# stage_run_command('cd /home/ubuntu/productor && /usr/local/bin/docker-compose -f docker-compose-{lower_server}.yaml pull', stage_name = 'BETA')
+# stage_run_command(glue('cd /home/ubuntu/productor && /usr/local/bin/docker-compose -f docker-compose-{lower_server}.yaml up -d --build productor_postgres'), stage_name = server_name)
+# # stage_run_command('cd /home/ubuntu/productor && /usr/local/bin/docker-compose -f docker-compose-{lower_server}.yaml up -d --build productor_initdb', stage_name = server_name)
+# stage_run_command('cd /home/ubuntu/productor && /usr/local/bin/docker-compose -f docker-compose-{lower_server}.yaml up -d --remove-orphans', stage_name = server_name)
+
