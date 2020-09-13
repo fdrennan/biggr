@@ -8,3 +8,5 @@ cd /home/ubuntu/productor && /usr/bin/docker build -t productor_app --file ./Doc
 cd /home/ubuntu/productor && /usr/local/bin/docker-compose up -d --build productor_postgres
 cd /home/ubuntu/productor && /usr/local/bin/docker-compose up -d --build productor_initdb
 cd /home/ubuntu/productor && /usr/local/bin/docker-compose up -d
+
+touch /home/ubuntu/docker_data_complete

@@ -1,3 +1,9 @@
+#' paramiko
+#' @export paramiko
+paramiko <- function() {
+  import("paramiko")
+}
+
 #' boto
 #' @export boto3
 boto3 <- function() {

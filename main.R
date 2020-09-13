@@ -1,24 +1,7 @@
 library(biggr)
+library(dbx)
 
 paramiko <- import('paramiko')
-
-run_command <- function(con, command) {
-  as.character(con$exec_command(command)[[2]]$read())
-}
-
-send_file <- function(con, local_path, remote_path) {
-  ftp_client = con$open_sftp()
-  ftp_client$put(local_path, remote_path)
-  ftp_client$close()
-}
-
-
-get_file <- function(self, remote_path, local_path) {
-  ftp_client = con$open_sftp()
-  ftp_client$get(remote_path, local_path)
-  ftp_client$close()
-}
-
 
 tryCatch(expr = {
   keyfile_create(keyname = 'fdren')
@@ -36,120 +19,80 @@ security_group_id <-
                         ports = c(22, 80, 8000:8020, 8787, 5432, 5439, 3000, 8080),
                         get_ip())
 
-if (TRUE) {
-  security_group_delete(security_group_id = security_group_id)
+server_names <- c('DEV', 'BETA', 'PROD')
 
-  security_group_create(security_group_name = security_group_name,
-                        description = 'Ports for Production')
-
-  security_group_id <-
-    security_group_envoke(sg_name = security_group_name,
-                          ports = c(22, 80, 8000:8020, 8787, 5432, 5439, 3000, 8080),
-                          get_ip())
-}
 
 response <-
   ec2_instance_create(ImageId = 'ami-0010d386b82bc06f0',
                       InstanceType='t2.2xlarge',
-                      min = 3,
-                      max = 3,
+                      min = length(server_names),
+                      max = length(server_names),
                       KeyName = 'fdren',
                       SecurityGroupId = security_group_id,
                       InstanceStorage = 50,
                       DeviceName = "/dev/sda1",
                       user_data  = readr::read_file('instance.sh'))
 
+specify_server_priority(instance_ids = map_chr(response, ~ .$instance_id),
+                        values = server_names)
 
-ip_addresses <- map_chr(response, function(x) x$public_ip_address)
+servers <- server_info()
+# dbxDelete(conn = con, table = 'server_stage', where = data.frame(stage = 'STAGE'))
 
-# walk(response, function(x) x$terminate())
-# ec2_instance_info()
 
-nginx_conf <- glue('
-events {}
 
-http {
-    autoindex on;
-    autoindex_exact_size off;
-    fastcgi_read_timeout 900;
-    proxy_read_timeout 900;
-
-    upstream devurl {
-        server --ip_addresses[[1]]--:8000;
-        server --ip_addresses[[1]]--:8001;
-    }
-
-    upstream betaurl {
-        server --ip_addresses[[2]]--:8000;
-        server --ip_addresses[[2]]--:8001;
-    }
-
-    upstream produrl {
-        server --ip_addresses[[3]]--:8000;
-        server --ip_addresses[[3]]--:8001;
-    }
-
-    server {
-
-        listen 80;
-
-        location /dev/ {
-            proxy_pass http://devurl/;
-        }
-
-        location /beta/ {
-            proxy_pass http://betaurl/;
-        }
-
-        location /prod/ {
-            proxy_pass http://produrl/;
-        }
-
-    }
-}
-', .open = '--', .close = '--')
-
-# walk(response[2:3], function(x) x$terminate())
-
-sleep_time <- 40
+sleep_time <- 60
 message(glue('Sleeping for {sleep_time} seconds'))
 Sys.sleep(sleep_time)
-ssh = paramiko$SSHClient()
-ssh$set_missing_host_key_policy(paramiko$AutoAddPolicy())
+
+# Refresh Database
+server_info()
 
 map2(
   response,
-  c('DEV', 'BETA', 'PROD'),
+  server_names,
   function(server, server_name) {
-
-    public_dns_name <- server$public_dns_name
-    message(glue('Generating {public_dns_name}'))
-    ssh$connect(server$public_dns_name,
-                username='ubuntu',
-                key_filename='fdren.pem')
+    server_info()
     time = 1
     cumulative_wait = sleep_time
-    while (str_detect(run_command(ssh, 'ls -lah') , 'user_data_running')) {
+    while (str_detect(stage_run_command('ls -lah', stage_name = server_name) , 'user_data_running')) {
       Sys.sleep(time)
       cumulative_wait = cumulative_wait + time
       message(glue('You have been waiting for {cumulative_wait} seconds'))
+      cat(stage_run_command(command = 'tail -n 30 logfile.txt'))
     }
 
-    # Refresh connection for docker usergroup modification
-    ssh$connect(server$public_dns_name,
-                username='ubuntu',
-                key_filename='fdren.pem')
-    # send_file(con = ssh, local_path = 'nginx/nginx.conf', remote_path = '/home/ubuntu/nginx.conf')
-    # send_file(con = ssh, local_path = 'nginx/docker-compose.yaml', remote_path = '/home/ubuntu/docker-compose.yaml')
-    cat(run_command(con = ssh, command = 'ls -lah'))
-    run_command(ssh, 'git clone https://github.com/fdrennan/productor.git')
-    # send_file(con = ssh, local_path = '.Renviron', remote_path = '/home/ubuntu/productor/.Renviron')
-    # send_file(con = ssh, local_path = '.env', remote_path = '/home/ubuntu/productor/.env')
-    send_file(con = ssh, local_path = 'docker.sh', remote_path = '/home/ubuntu/docker.sh')
-    run_command(ssh, glue('echo SERVER={server_name} >> /home/ubuntu/productor/.Renviron'))
-    cat(run_command(con = ssh, command = '. docker.sh'))
+    stage_run_command('ls -lah', stage_name = server_name)
+    stage_run_command('git clone https://github.com/fdrennan/productor.git', stage_name = server_name)
+
+    lower_server <- str_to_lower(server_name)
+    stage_run_command(command = glue('cd /home/ubuntu/productor && git checkout -b {lower_server} && git pull origin {lower_server}'),
+                      stage_name = server_name)
+
+    stage_transfer_file(local_path = 'docker.sh', remote_path = '/home/ubuntu/docker.sh', stage_name = server_name)
+    stage_run_command(glue('echo SERVER={server_name} >> /home/ubuntu/productor/.Renviron'),
+                      stage_name = server_name)
+    stage_run_command('. docker.sh',
+                      stage_name = server_name)
   }
 )
 
-#
-#
+map(
+  server_names,
+  function(server_name) {
+    time = 1
+    cumulative_wait = 0
+    while (!str_detect(stage_run_command('ls -lah', stage_name = server_name) , 'docker_data_complete')) {
+      Sys.sleep(time)
+      cumulative_wait = cumulative_wait + time
+      cat(
+        cat(stage_run_command(command = 'tail -n 30 docker.txt'))
+      )
+    }
+  }
+)
+
+
+sns_send_message(phone_number = Sys.getenv('PHONE'), message = 'All Done')
+
+server_info()$instances$stop()
