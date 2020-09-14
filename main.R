@@ -96,31 +96,125 @@ map(
         cat(stage_run_command(command = 'tail -n 30 docker.txt'))
       )
     }
-    if (lower_server == 'prod') {
-      stage_run_command('cd /home/ubuntu/productor && /usr/local/bin/docker-compose -f docker-compose.yaml pull', stage_name = server_name)
-      stage_run_command(glue('cd /home/ubuntu/productor && /usr/local/bin/docker-compose -f docker-compose.yaml up -d --build productor_postgres'), stage_name = server_name)
-      stage_run_command('cd /home/ubuntu/productor && /usr/local/bin/docker-compose -f docker-compose.yaml up -d --build productor_initdb', stage_name = server_name)
-      stage_run_command('cd /home/ubuntu/productor && /usr/local/bin/docker-compose -f docker-compose.yaml up -d --remove-orphans', stage_name = server_name)
-    } else {
-      stage_run_command(glue('cd /home/ubuntu/productor && /usr/local/bin/docker-compose -f docker-compose-{lower_server}.yaml pull'), stage_name = server_name)
-      stage_run_command(glue('cd /home/ubuntu/productor && /usr/local/bin/docker-compose -f docker-compose-{lower_server}.yaml up -d --build productor_postgres'), stage_name = server_name)
-      stage_run_command(glue('cd /home/ubuntu/productor && /usr/local/bin/docker-compose -f docker-compose-{lower_server}.yaml up -d --build productor_initdb'), stage_name = server_name)
-      stage_run_command(glue('cd /home/ubuntu/productor && /usr/local/bin/docker-compose -f docker-compose-{lower_server}.yaml up -d --remove-orphans'), stage_name = server_name)
-    }
   }
 )
 
 
 sns_send_message(phone_number = Sys.getenv('PHONE'), message = 'All Done')
-# library(biggr)
-# library(dbx)
-# server_info()$instances$terminate()
+# Sys.sleep(30)
+server_info()$instances$stop()
 
 
+library(biggr)
+library(dbx)
 
-# stage_run_command('/home/ubuntu/productor && sudo /usr/bin/Rscript update_env.R', stage_name = 'BETA')
-# stage_run_command('cd /home/ubuntu/productor && /usr/local/bin/docker-compose -f docker-compose-{lower_server}.yaml pull', stage_name = 'BETA')
-# stage_run_command(glue('cd /home/ubuntu/productor && /usr/local/bin/docker-compose -f docker-compose-{lower_server}.yaml up -d --build productor_postgres'), stage_name = server_name)
-# # stage_run_command('cd /home/ubuntu/productor && /usr/local/bin/docker-compose -f docker-compose-{lower_server}.yaml up -d --build productor_initdb', stage_name = server_name)
-# stage_run_command('cd /home/ubuntu/productor && /usr/local/bin/docker-compose -f docker-compose-{lower_server}.yaml up -d --remove-orphans', stage_name = server_name)
+start_servers <- function() {
+  instances <- server_info()$instances
+  instances$start()
+  map(
+    iterate(instances$all()),
+    function(x) {
+      x$wait_until_running()
+    }
+  )
+  server_info()
+}
 
+stop_servers <- function() {
+  instances <- server_info()$instances
+  instances$stop()
+  map(
+    iterate(instances$all()),
+    function(x) {
+      x$wait_until_stopped()
+    }
+  )
+  server_info()
+}
+
+stop_servers()
+start_servers()
+
+lower_server <- str_to_lower(server_names)
+server_names <- c('DEV', 'BETA', 'PROD')
+library(stringr)
+map(server_names, ~ {
+  # server_info()$instances$start()
+  lower_stage <- str_to_lower(.)
+  message(.)
+  if (. == 'PROD') {
+    stage_run_command(command = glue('cd /home/ubuntu/productor && /usr/bin/git pull origin'),
+                      stage_name = .)
+    # undebug(stage_run_command)
+    stage_run_command('cd /home/ubuntu/productor && sudo /usr/bin/Rscript update_env.R', stage_name = .)
+    stage_run_command(glue('cd /home/ubuntu/productor && /usr/local/bin/docker-compose -f docker-compose.yaml pull'), stage_name = .)
+    stage_run_command(glue('cd /home/ubuntu/productor && /usr/local/bin/docker-compose -f docker-compose.yaml pull'), stage_name = .)
+    stage_run_command(
+      glue('cd /home/ubuntu/productor && /usr/local/bin/docker-compose -f docker-compose.yaml up -d --build productor_postgres'),
+      stage_name = .)
+    stage_run_command(
+      glue('cd /home/ubuntu/productor && /usr/local/bin/docker-compose -f docker-compose.yaml -d --build productor_initdb'),
+      stage_name = .)
+    stage_run_command(
+      glue('cd /home/ubuntu/productor && /usr/local/bin/docker-compose -f docker-compose.yaml restart'),
+      stage_name = .)
+    stage_run_command(
+      glue('cd /home/ubuntu/productor && /usr/local/bin/docker-compose -f docker-compose.yaml up -d'),
+      stage_name = .)
+  } else {
+    stage_run_command(command = glue('cd /home/ubuntu/productor && /usr/bin/git pull origin {lower_stage}'),
+                      stage_name = .)
+    # undebug(stage_run_command)
+    stage_run_command('cd /home/ubuntu/productor && sudo /usr/bin/Rscript update_env.R', stage_name = .)
+    stage_run_command(glue('cd /home/ubuntu/productor && /usr/local/bin/docker-compose -f docker-compose-{lower_stage}.yaml pull'), stage_name = .)
+    stage_run_command(glue('cd /home/ubuntu/productor && /usr/local/bin/docker-compose -f docker-compose-{lower_stage}.yaml pull'), stage_name = .)
+    stage_run_command(
+      glue('cd /home/ubuntu/productor && /usr/local/bin/docker-compose -f docker-compose-{lower_stage}.yaml up -d --build productor_postgres'),
+      stage_name = .)
+    stage_run_command(
+      glue('cd /home/ubuntu/productor && /usr/local/bin/docker-compose -f docker-compose-{lower_stage}.yaml -d --build productor_initdb'),
+      stage_name = .)
+    stage_run_command(
+      glue('cd /home/ubuntu/productor && /usr/local/bin/docker-compose -f docker-compose-{lower_stage}.yaml restart'),
+      stage_name = .)
+    stage_run_command(
+      glue('cd /home/ubuntu/productor && /usr/local/bin/docker-compose -f docker-compose-{lower_stage}.yaml up -d'),
+      stage_name = .)
+  }
+ }
+)
+instances$stop()
+#
+
+
+# cd /home/ubuntu/productor && /usr/bin/git pull origin dev
+# cd /home/ubuntu/productor && /usr/bin/git pull origin dev
+# cd /home/ubuntu/productor && /usr/local/bin/docker-compose -f docker-compose-dev.yaml pull
+# cd /home/ubuntu/productor && /usr/local/bin/docker-compose -f docker-compose-dev.yaml up -d --build productor_postgres
+# cd /home/ubuntu/productor && /usr/local/bin/docker-compose -f docker-compose-dev.yaml up -d --build productor_initdb
+# cd /home/ubuntu/productor && /usr/local/bin/docker-compose -f docker-compose-dev.yaml down
+# cd /home/ubuntu/productor && /usr/local/bin/docker-compose -f docker-compose-dev.yaml up
+
+
+# cd /home/ubuntu/productor && /usr/local/bin/docker-compose -f docker-compose-beta.yaml pull
+# cd /home/ubuntu/productor && /usr/local/bin/docker-compose -f docker-compose-beta.yaml up -d --build productor_postgres
+# cd /home/ubuntu/productor && /usr/local/bin/docker-compose -f docker-compose-beta.yaml up -d --build productor_initdb
+# cd /home/ubuntu/productor && /usr/local/bin/docker-compose -f docker-compose-beta.yaml down
+# cd /home/ubuntu/productor && /usr/local/bin/docker-compose -f docker-compose-beta.yaml up
+
+# cd /home/ubuntu/productor && /usr/local/bin/docker-compose -f docker-compose.yaml pull
+# cd /home/ubuntu/productor && /usr/local/bin/docker-compose -f docker-compose.yaml up -d --build productor_postgres
+# cd /home/ubuntu/productor && /usr/local/bin/docker-compose -f docker-compose.yaml up -d --build productor_initdb
+# cd /home/ubuntu/productor && /usr/local/bin/docker-compose -f docker-compose.yaml down
+# cd /home/ubuntu/productor && /usr/local/bin/docker-compose -f docker-compose.yaml up
+
+# if (TRUE) {
+#   # server_info()$instances$start()
+#   stage_run_command(command = glue('cd /home/ubuntu/productor && git pull origin beta'),
+#                     stage_name = 'BETA')
+#   stage_run_command('cd /home/ubuntu/productor && sudo /usr/bin/Rscript update_env.R', stage_name = 'BETA')
+#   stage_run_command('cd /home/ubuntu/productor && /usr/local/bin/docker-compose -f docker-compose.yaml pull', stage_name = 'BETA')
+#   stage_run_command('cd /home/ubuntu/productor && /usr/local/bin/docker-compose -f docker-compose.yaml up -d --build productor_postgres', stage_name = 'BETA')
+#   stage_run_command('cd /home/ubuntu/productor && /usr/local/bin/docker-compose -f docker-compose.yaml -d --build productor_initdb', stage_name = 'BETA')
+#   stage_run_command('cd /home/ubuntu/productor && /usr/local/bin/docker-compose -f docker-compose.yaml up -d --remove-orphans', stage_name = 'BETA')
+# }
