@@ -15,15 +15,11 @@ checking_if_complete <- function(dns_names = NULL,
                                  follow_file = NULL,
                                  keyfile = "/Users/fdrennan/fdren.pem") {
   all_done <- FALSE
-  sleep_time <- 1
-  total_iterations <- 0
+
+
   while (!all_done) {
-    message(glue('Waiting for {sleep_time} seconds'))
-    message(glue('Iteration number {total_iterations}'))
-
-    Sys.sleep(sleep_time)
-    total_iterations = total_iterations + 1
-
+    cat("\f")
+    glue_me('The current time is {Sys.time()}')
     all_done <- tryCatch(expr = {
 
       if (!is.null(follow_file)) {
@@ -43,16 +39,19 @@ checking_if_complete <- function(dns_names = NULL,
       }
 
 
+      message(glue('\n\nLooking for {unique_file}'))
       current_directories <-
         map(dns_names,
             ~ {
               response <- execute_command_to_server(
-                command = 'ls -la',
+                command = 'ls -lah',
                 hostname = .,
                 username = username,
                 keyfile = keyfile
               )[[1]]
             })
+
+      sleep_a_sec(sleep_time = 10)
 
       all_done <- all(map_lgl(current_directories, ~ str_detect(., unique_file)))
 
