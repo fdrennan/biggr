@@ -2,44 +2,60 @@ library(biggr)
 library(dbx)
 library(ndexssh)
 
+# KILL EVERYTHING OFF -----------------------------------------------------
 
+try(resource_ec2()$instances$all()$terminate())
+
+# PARAMS ------------------------------------------------------------------
+
+sleep_a_sec(sleep_steps = 3, sleep_time = 10)
 stages <- c('dev', 'beta', 'master')
-
-
 # Create Security Group
 security_group_name <- 'production'
 security_group_description <- 'Ports for Production'
 key_name <- 'fdren'
 open_ports <- c(22, 80, 6000, 8000:8020, 8787, 5432, 5439, 3000, 8080)
-open_ips <- get_ip()
+image_id <-  'ami-0010d386b82bc06f0'
+instance_type <- 't2.xlarge'
 
+
+# SECURITY GROUPS AND KEYFILES --------------------------------------------
 security_group_create(security_group_name = security_group_name,
                       description = security_group_description)
-
-
 security_group_id <-
    security_group_envoke(sg_name = security_group_name,
                          ports = open_ports)
-
-# Create Keyfile
 keyfile_creation <- tryCatch(expr = {
    keyfile_create(keyname = key_name)
 }, error =  function(err) {
    message(glue('Keyfile {key_name} Already Exists'))
 })
 
+
+
+# BUILD THE SERVERS -------------------------------------------------------
+
+build_script <- readr::read_file('instance.sh')
+message(build_script)
+
 servers_objects <-
-   ec2_instance_create(ImageId = 'ami-0010d386b82bc06f0',
-                       InstanceType='t2.xlarge',
+   ec2_instance_create(ImageId = image_id,
+                       InstanceType = instance_type,
                        min = length(stages),
                        max = length(stages),
                        KeyName = key_name,
                        SecurityGroupId = security_group_id,
                        InstanceStorage = 30,
                        DeviceName = "/dev/sda1",
-                       user_data  = readr::read_file('instance.sh'))
+                       user_data  = build_script)
+
+
+# Wait a few, so we can get a good SSH connection first try. --------------
 
 sleep_a_sec(sleep_time = 10)
+
+
+# Get hostnames -----------------------------------------------------------
 
 dns_names <- map_chr(servers_objects, function(x) {x$public_dns_name})
 
@@ -60,7 +76,7 @@ stage_scripts <-
       function(stage) {
          command_block <-c(
             "#!/bin/bash",
-            "exec &> /home/ubuntu/logfile.txt",
+            "exec &> /home/ubuntu/post_install.txt",
             "ls -lah",
             "sudo apt-get update -y",
             "git clone https://github.com/fdrennan/docker_pull_postgres.git || echo 'Directory already exists...'",
@@ -69,6 +85,7 @@ stage_scripts <-
             "docker-compose -f docker_pull_postgres/docker-compose.yml up -d",
             "git clone https://github.com/fdrennan/productor.git",
             glue('cd /home/ubuntu/productor && echo SERVER={stage} >> .env'),
+            glue('cd /home/ubuntu/productor && echo SERVER={stage} >> .bashrc'),
             glue("cd /home/ubuntu/productor && echo SERVER={stage} >> .Renviron"),
             glue('cd productor && git reset --hard'),
             glue("cd /home/ubuntu/productor && sudo /usr/bin/Rscript update_env.R"),
@@ -106,10 +123,56 @@ response <-
       }, .progress = TRUE
    )
 
-# dockerlogs_script_complete <-
-#    checking_if_complete(dns_names = dns_names,
-#                         username = "ubuntu",
-#                         follow_file = 'logfile.txt',
-#                         unique_file = 'productor_logs_complete',
-#                         keyfile = "/Users/fdrennan/fdren.pem")
 
+
+# Build The Damn Things
+
+rebuild_service <- function() {
+   stage_scripts <-
+      map(
+         stages,
+         function(stage) {
+            command_block <-c(
+               "#!/bin/bash",
+               # "rm /home/ubuntu/last_git_update_complete || echo 'last_git_update_complete does not exist'",
+               # "rm /home/ubuntu/last_git_update.txt || echo 'last_git_update does not exist'",
+               "exec &> /home/ubuntu/last_git_update.txt",
+               "docker-compose -f docker_pull_postgres/docker-compose.yml pull",
+               "docker-compose -f docker_pull_postgres/docker-compose.yml down",
+               "docker-compose -f docker_pull_postgres/docker-compose.yml up -d",
+               glue('cd productor && git reset --hard'),
+               glue("cd /home/ubuntu/productor && sudo /usr/bin/Rscript update_env.R"),
+               glue('cd /home/ubuntu/productor && git pull origin {stage} && git branch'),
+               glue("cd /home/ubuntu/productor && docker-compose -f docker-compose-{stage}.yaml pull"),
+               glue("cd /home/ubuntu/productor && docker-compose -f docker-compose-{stage}.yaml up -d --build productor_postgres"),
+               glue("cd /home/ubuntu/productor && docker-compose -f docker-compose-{stage}.yaml up -d --build productor_initdb"),
+               glue("cd /home/ubuntu/productor && docker-compose -f docker-compose-{stage}.yaml restart"),
+               "touch /home/ubuntu/last_git_update_complete"
+            )
+         }
+      )
+
+   library(furrr)
+   plan(multiprocess)
+   response <-
+      future_map2(
+         stage_scripts,
+         dns_names,
+         function(script, dns) {
+            script_name <- glue('{dns}script.sh')
+            writeLines(text = script, con = script_name)
+            message(glue('Building: ssh -i "~/fdren.pem" ubuntu@{dns}'))
+            send_file(hostname = dns,
+                      username = "ubuntu",
+                      keyfile = "/Users/fdrennan/fdren.pem",
+                      local_path = script_name,
+                      remote_path = glue('/home/ubuntu/{script_name}'))
+            cmd_response <- execute_command_to_server(
+               command = glue('. /home/ubuntu/{script_name}'),
+               hostname = dns
+            )
+            fs::file_delete(script_name)
+            cmd_response
+         }, .progress = TRUE
+      )
+}
