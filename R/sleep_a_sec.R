@@ -13,7 +13,7 @@ sleep_a_sec <- function(sleep_steps = 3,
   walk(
     sleep_steps:1,
     function(x) {
-      message(glue('Sleeping for {x*sleep_time} more seconds\n\n'))
+      message(glue('\n\nSleeping for {x*sleep_time} more seconds\n\n'))
       sleep_quote(sleep_time = sleep_time)
     }
   )
