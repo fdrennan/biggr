@@ -1,19 +1,36 @@
 library(biggr)
 library(dbx)
 library(ndexssh)
-# library(furrr)
-# plan(multiprocess)
+
+
+stop_all <- function() {
+   servers <- grab_servers()
+   map(servers, ~ try(.$stop()))
+}
+
+terminate_all <- function() {
+   servers <- grab_servers()
+   map(servers, ~ try(.$terminate()))
+}
+
+# SET PARAMETERS ----------------------------------------------------------
+
 
 stages <- c('dev', 'beta', 'master')
-
-
-# Create Security Group
 security_group_name <- 'production'
 security_group_description <- 'Ports for Production'
 key_name <- 'fdren'
-open_ports <- c(22, 80, 6000, 8000:8020, 8787, 5432, 5439, 3000, 8080)
+open_ports <- c(
+   22, 80,
+   3000,
+   5432, 5439,
+   6000,
+   8000:8020, 8080, 8787
+)
 open_ips <- get_ip()
 
+
+# CREATE SECURITY CREATE --------------------------------------------------
 security_group_create(security_group_name = security_group_name,
                       description = security_group_description)
 
@@ -22,12 +39,16 @@ security_group_id <-
                          ports = open_ports,
                          ips = open_ips)
 
-# Create Keyfile
+
+# CREATE KEYFILE ----------------------------------------------------------
+
 keyfile_creation <- tryCatch(expr = {
    keyfile_create(keyname = key_name)
 }, error =  function(err) {
    message(glue('Keyfile {key_name} Already Exists'))
 })
+
+
 
 servers_objects <-
    ec2_instance_create(ImageId = 'ami-0010d386b82bc06f0',
@@ -43,10 +64,11 @@ servers_objects <-
 Sys.sleep(60)
 
 dns_names <- map_chr(servers_objects, function(x) {x$public_dns_name})
+
 initial_script_complete <-
    checking_if_complete(dns_names = dns_names,
                         username = "ubuntu",
-                        follow_file = '/home/ubuntu/logfile.txt',
+                        follow_file = 'user_data_running',
                         unique_file = 'user_data_complete',
                         keyfile = "/Users/fdrennan/fdren.pem")
 
@@ -56,19 +78,14 @@ stage_scripts <-
       function(stage) {
          command_block <-c(
             "#!/bin/bash",
-
-            "sudo rm /home/ubuntu/logfile.txt",
-            "sudo rm /home/ubuntu/productor_logs_complete",
-            "exec &> /home/ubuntu/logfile.txt",
-
+            "exec &> /home/ubuntu/productor_logs.txt",
+            "rm /home/ubuntu/productor_logs_complete",
             "ls -lah",
             "sudo apt-get update -y",
             "git clone https://github.com/fdrennan/docker_pull_postgres.git || echo 'Directory already exists...'",
             "docker-compose -f docker_pull_postgres/docker-compose.yml pull",
             "docker-compose -f docker_pull_postgres/docker-compose.yml down",
             "docker-compose -f docker_pull_postgres/docker-compose.yml up -d",
-
-
             "touch /home/ubuntu/productor_logs_complete"
          )
       }
@@ -96,13 +113,13 @@ response <-
       }
    )
 
+
 dockerlogs_script_complete <-
    checking_if_complete(dns_names = dns_names,
                         username = "ubuntu",
-                        follow_file = 'logfile.txt',
+                        follow_file = 'productor_logs.txt',
                         unique_file = 'productor_logs_complete',
                         keyfile = "/Users/fdrennan/fdren.pem")
-
 
 
 stage_scripts <-
@@ -111,19 +128,20 @@ stage_scripts <-
       function(branch) {
          command_block <-c(
             "#!/bin/bash",
-
-            "sudo rm /home/ubuntu/logfile.txt",
-            "sudo rm /home/ubuntu/productor_logs_complete",
-            "exec &> /home/ubuntu/logfile.txt",
-
+            "exec &> /home/ubuntu/productor_logs.txt",
             "git clone https://github.com/fdrennan/productor.git",
             glue('cd /home/ubuntu/productor && echo SERVER={branch} >> .env'),
             glue("cd /home/ubuntu/productor && echo SERVER={branch} >> .Renviron"),
             glue('cd productor && git reset --hard'),
             glue("cd /home/ubuntu/productor && sudo /usr/bin/Rscript update_env.R"),
             glue('cd ~/productor && git checkout {branch} && git pull origin {branch} && git branch'),
-
-            "touch /home/ubuntu/productor_logs_complete"
+            command = glue('cd ~/productor && cat .env'),
+            command = glue('cd ~/productor && cat .Renviron'),
+            glue('cd ~/productor && cat nginx*'),
+            glue('cd ~/productor && cat nginx/nginx.conf'),
+            glue('cd ~/productor && docker-compose -f docker-compose-{branch}.yaml pull'),
+            glue('cd ~/productor && docker-compose -f docker-compose-{branch}.yaml up -d'),
+            "touch /home/ubuntu/git_commands_complete"
          )
       }
    )
@@ -150,20 +168,13 @@ response <-
       }
    )
 
-
 dockerlogs_script_complete <-
    checking_if_complete(dns_names = dns_names,
                         username = "ubuntu",
-                        follow_file = 'logfile.txt',
-                        unique_file = 'productor_logs_complete',
+                        follow_file =  "productor_logs.txt",
+                        unique_file = 'git_commands_complete',
                         keyfile = "/Users/fdrennan/fdren.pem")
 
 
 
-
-
-
-
-# servers <- grab_servers()
-# map(servers, ~ try(.$terminate()))
-# system('rm ec2*.sh')
+# # system('rm ec2*.sh')

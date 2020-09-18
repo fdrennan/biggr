@@ -5,11 +5,14 @@
 #' @param dns_names dns names
 #' @param username username
 #' @param password password
+#' @param unique_file unique_file
 #' @param keyfile keyfile
 #' @export checking_if_complete
 checking_if_complete <- function(dns_names = NULL,
                                  username = "ubuntu",
                                  password = "password",
+                                 unique_file = "complete",
+                                 follow_file = NULL,
                                  keyfile = "/Users/fdrennan/fdren.pem") {
   all_done <- FALSE
   sleep_time <- 1
@@ -23,6 +26,23 @@ checking_if_complete <- function(dns_names = NULL,
 
     all_done <- tryCatch(expr = {
 
+      if (!is.null(follow_file)) {
+        status <-
+          map(dns_names,
+              ~ {
+                response <- execute_command_to_server(
+                  command = glue('tail {follow_file}'),
+                  hostname = .,
+                  username = username,
+                  keyfile = keyfile
+                )[[1]]
+
+                cat(response)
+                response
+              })
+      }
+
+
       current_directories <-
         map(dns_names,
             ~ {
@@ -34,8 +54,7 @@ checking_if_complete <- function(dns_names = NULL,
               )[[1]]
             })
 
-      print(current_directories)
-      all_done <- all(map_lgl(current_directories, ~ str_detect(., 'complete')))
+      all_done <- all(map_lgl(current_directories, ~ str_detect(., unique_file)))
 
     }, error = function(err) {
       message(as.character(err))
