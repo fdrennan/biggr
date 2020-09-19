@@ -1,3 +1,4 @@
+#' sleep_a_sec
 #' @param sleep_steps = 3,
 #' @param sleep_time = 2
 #' @export sleep_a_sec

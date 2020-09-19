@@ -1,3 +1,4 @@
+#' glue_me
 #' @importFrom glue glue
 #' @param string_value Any string
 #' @export glue_me

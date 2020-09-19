@@ -1,3 +1,4 @@
+#' checking_if_complete
 #' @description Check to see if complete file exists
 #' @importFrom glue glue
 #' @importFrom purrr walk map map_lgl

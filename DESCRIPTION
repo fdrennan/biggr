@@ -9,7 +9,7 @@ Description: Uses the boto3 Python package to access ec2 and s3 in AWS. More fea
     preconfigured servers designed specifically for the R user in mind.
 License: GPL-2
 Encoding: UTF-8
-Depends:
+Imports:
     reticulate,
     purrr,
     dplyr,
