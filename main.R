@@ -2,16 +2,8 @@ library(biggr)
 library(dbx)
 library(ndexssh)
 
-
-
 stages <- c('BUILD', 'STARTUP', 'STOP')
 BUILD_STAGE = stages[1]
-
-
-
-
-
-
 
 if (BUILD_STAGE == 'BUILD') {
    # PARAMS ------------------------------------------------------------------

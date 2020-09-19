@@ -1,5 +1,5 @@
 #' @importFrom reticulate iterate
-#' @importFrom map purrr
+#' @importFrom purrr map
 #' @export stop_service
 stop_service <- function(wait = TRUE) {
   map(iterate(resource_ec2()$instances$all()), ~ try(.$stop()))
@@ -9,7 +9,7 @@ stop_service <- function(wait = TRUE) {
 }
 
 #' @importFrom reticulate iterate
-#' @importFrom map purrr
+#' @importFrom purrr map
 #' @export start_service
 start_service <- function(wait = TRUE) {
   map(iterate(resource_ec2()$instances$all()), ~ try(.$start()))
@@ -19,7 +19,7 @@ start_service <- function(wait = TRUE) {
 }
 
 #' @importFrom reticulate iterate
-#' @importFrom map purrr
+#' @importFrom purrr map
 #' @export terminate_service
 terminate_service <- function(wait = TRUE) {
   map(iterate(resource_ec2()$instances$all()), ~ try(.$terminate()))
