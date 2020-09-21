@@ -3,19 +3,19 @@ run_command <- function(con, command) {
   as.character(con$exec_command(command)[[2]]$read())
 }
 
-#' @export send_file
-send_file <- function(con, local_path, remote_path) {
-  ftp_client = con$open_sftp()
-  ftp_client$put(local_path, remote_path)
-  ftp_client$close()
-}
-
-#' @export get_file
-get_file <- function(con, remote_path, local_path) {
-  ftp_client = con$open_sftp()
-  ftp_client$get(remote_path, local_path)
-  ftp_client$close()
-}
+# #' @export send_file
+#' send_file <- function(con, local_path, remote_path) {
+#'   ftp_client = con$open_sftp()
+#'   ftp_client$put(local_path, remote_path)
+#'   ftp_client$close()
+#' }
+#'
+# @export get_file
+#' get_file <- function(con, remote_path, local_path) {
+#'   ftp_client = con$open_sftp()
+#'   ftp_client$get(remote_path, local_path)
+#'   ftp_client$close()
+#' }
 
 #' @export stage_run_command
 stage_run_command <- function(command = 'ls -lah', stage_name = 'DEV', key_filename='fdren.pem') {

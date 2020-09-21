@@ -1,7 +1,12 @@
 # INSTALLATION
 
-aws ec2 create-default-vpc
 
+### Other Packages
+#### [environ](https://github.com/fdrennan/environ)
+#### [ndexutils](https://github.com/fdrennan/ndexutils)
+#### [biggr](https://github.com/fdrennan/biggr)
+#### [ndexssh](https://github.com/fdrennan/ndexssh)
+#### [ndexrstrator](https://github.com/fdrennan/ndexrstrator)
 
 Technical documentation is not complete but is located [here](https://fdrennan.github.io/biggr_book/).
 
