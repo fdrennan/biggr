@@ -2,8 +2,7 @@
 % Please edit documentation in R/ssh_functions.R
 \name{stage_run_command}
 \alias{stage_run_command}
-\title{#' @export send_file
-send_file <- function(con, local_path, remote_path) {
+\title{send_file <- function(con, local_path, remote_path) {
   ftp_client = con$open_sftp()
   ftp_client$put(local_path, remote_path)
   ftp_client$close()
@@ -16,7 +15,6 @@ stage_run_command(
 )
 }
 \description{
-#' @export get_file
 get_file <- function(con, remote_path, local_path) {
   ftp_client = con$open_sftp()
   ftp_client$get(remote_path, local_path)
